@@ -8,7 +8,7 @@ const app = express();
 app.use(morgan("dev"))
 
 app.get('/', (req:Request, res: Response) => {
-  res.send('Tradiezz Backend is running nicely...')
+  res.send('Tradiezz Backend is running nicely.goni hales...........')
 })
 
 app.use("/api/v1/user", UserRoute)
