@@ -7,9 +7,9 @@ const router = express.Router();
 
 
 router.post(
-  "/login",
+  "/login-admin",
   validationMiddleware(loginValidationSchema),
-  AuthController.loginUser
+  AuthController.loginAdmin
 );
 
 

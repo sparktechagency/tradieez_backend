@@ -1,5 +1,7 @@
 import { Document } from "mongoose";
 
+export type TUserRole = "candidate" | "employer" | "admin" | "superAdmin";
+
 
 export interface IUser extends Document {
     email: string;
@@ -7,7 +9,7 @@ export interface IUser extends Document {
     isVerified: boolean;
     passwordChangedAt?: Date;
     status: "pending" | "active" | "blocked";
-    role: "candidate" | "employer" | "admin" | "superAdmin";
+    role: TUserRole;
     regOtp: string;
     regOtpExpires: Date,
     forgotOtp: string;

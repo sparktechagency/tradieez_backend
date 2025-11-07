@@ -1,6 +1,10 @@
+import { Secret } from "jsonwebtoken";
 import CustomError from "../../errors/CustomError";
 import { ILogin } from "../../interfaces/auth.interface";
 import UserModel from "../../models/UserModel";
+import checkPassword from "../../utils/checkPassword";
+import createToken, { TExpiresIn } from "../../utils/createToken";
+import config from "../../config";
 
 
 const LoginAdminService = async (payload: ILogin) => {
@@ -19,7 +23,7 @@ const LoginAdminService = async (payload: ILogin) => {
     throw new CustomError(403, "Your account is blocked !")
   }
 
-  //check you are not super_admin or administrator
+  //check you are not super_admin or admin
   if ((user.role !== "admin") && (user.role !== "superAdmin")) {
     throw new CustomError(403, `Sorry! You are not 'Super Admin' or 'Admin'`);
   }
