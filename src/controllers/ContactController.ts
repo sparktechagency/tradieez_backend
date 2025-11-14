@@ -8,7 +8,7 @@ const createContact = asyncHandler(async (req, res) => {
     const result = await CreateContactService(req.body);
     res.status(200).json({
         success: true,
-        message: "Contact is submitted successfully",
+        message: "Your contact information has been submitted successfully.",
         data: result
     })
 })

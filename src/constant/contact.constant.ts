@@ -7,4 +7,5 @@ export const ContactValidFields: string[] = [
   "limit",
   "sortBy",
   "sortOrder",
+  "status"
 ];

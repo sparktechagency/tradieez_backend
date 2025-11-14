@@ -13,19 +13,19 @@ const GetContactsService = async (query: TContactQuery) => {
     ...filters  // Any additional filters
   } = query;
 
-  // 2. Set up pagination
+  // 1. Set up pagination
   const skip = (Number(page) - 1) * Number(limit);
 
-  //3. setup sorting
+  //2. setup sorting
   const sortDirection = sortOrder === "asc" ? 1 : -1;
 
-  //4. setup searching
+  //3. setup searching
   let searchQuery = {};
   if (searchTerm) {
     searchQuery = makeSearchQuery(searchTerm, ContactSearchableFields);
   }
 
-  //5 setup filters
+  //4. setup filters
   let filterQuery = {};
   if (filters) {
     filterQuery = makeFilterQuery(filters);
@@ -63,7 +63,7 @@ const GetContactsService = async (query: TContactQuery) => {
 
 return {
   meta: {
-    page: Number(page), //currentPage
+    page: Number(page),
     limit: Number(limit),
     totalPages,
     total: totalCount,
