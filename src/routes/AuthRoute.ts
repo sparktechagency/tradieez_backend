@@ -18,6 +18,11 @@ router.post(
   AuthController.verifyEmail
 );
 router.post(
+  "/login-user",
+  validationMiddleware(loginValidationSchema),
+  AuthController.loginUser
+);
+router.post(
   "/login-admin",
   validationMiddleware(loginValidationSchema),
   AuthController.loginAdmin
