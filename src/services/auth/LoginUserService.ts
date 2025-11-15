@@ -5,9 +5,11 @@ import UserModel from "../../models/UserModel";
 import checkPassword from "../../utils/checkPassword";
 import createToken, { TExpiresIn } from "../../utils/createToken";
 import config from "../../config";
+import EmployerModel from "../../models/EmployerModel";
 
 const LoginUserService = async (payload: ILogin) => {
-    const user = await UserModel.findOne({ email: payload.email }).select(
+    const { email, password } = payload;
+    const user = await UserModel.findOne({ email }).select(
         "+password"
     );
     if (!user) {
@@ -25,32 +27,66 @@ const LoginUserService = async (payload: ILogin) => {
     }
 
     //check password
-    const isPasswordMatch = await checkPassword(payload.password, user.password);
+    const isPasswordMatch = await checkPassword(password, user.password);
     if (!isPasswordMatch) {
         throw new CustomError(400, "Wrong Password");
     }
 
-    //check you are not user
+    //check you are not candidate or employer
     if ((user.role !== "candidate") && (user.role !== "employer")) {
         throw new CustomError(403, `Sorry! You have no access to login`);
     }
 
-    //create accessToken
-    const accessToken = createToken(
-        { email: user.email, fullName: user?.fullName, phone: user?.phone, id: String(user._id), role: user.role },
-        config.jwt_access_secret as Secret,
-        config.jwt_access_expires_in as TExpiresIn
-    );
-    //create refreshToken
-    const refreshToken = createToken(
-        { email: user.email, fullName: user?.fullName, id: String(user._id), role: user.role },
-        config.jwt_refresh_secret as Secret,
-        config.jwt_refresh_expires_in as TExpiresIn
-    );
+    
+    if (user.role === "employer") {
+        const employer = await EmployerModel.findOne({ email, userId: user._id });
+        if(!employer){
+            throw new CustomError(404, "User data not found")
+        }
 
-    return {
-        accessToken,
-    };
+        //create accessToken
+        const accessToken = createToken(
+            { userId: String(user._id), email: user.email, fullName: employer.fullName, profileImg:employer.profileImg, role: user.role },
+            config.jwt_access_secret as Secret,
+            config.jwt_access_expires_in as TExpiresIn
+        );
+        //create refreshToken
+        const refreshToken = createToken(
+             { userId: String(user._id), email: user.email, fullName: employer.fullName, profileImg:employer.profileImg, role: user.role },
+            config.jwt_refresh_secret as Secret,
+            config.jwt_refresh_expires_in as TExpiresIn
+        );
+
+        return {
+            accessToken,
+            refreshToken
+        };
+
+    }else{
+
+        const employer = await EmployerModel.findOne({ email, userId: user._id });
+        if(!employer){
+            throw new CustomError(404, "User data not found")
+        }
+
+        //create accessToken
+        const accessToken = createToken(
+            { userId: String(user._id), email: user.email, fullName: employer.fullName, profileImg:employer.profileImg, role: user.role },
+            config.jwt_access_secret as Secret,
+            config.jwt_access_expires_in as TExpiresIn
+        );
+        //create refreshToken
+        const refreshToken = createToken(
+             { userId: String(user._id), email: user.email, fullName: employer.fullName, profileImg:employer.profileImg, role: user.role },
+            config.jwt_refresh_secret as Secret,
+            config.jwt_refresh_expires_in as TExpiresIn
+        );
+
+        return {
+            accessToken,
+            refreshToken
+        };
+    }
 }
 
 

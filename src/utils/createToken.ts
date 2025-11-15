@@ -5,10 +5,10 @@ export type TExpiresIn = number | `${number}${'s' | 'm' | 'h' | 'd'}`
 
 
 type TPayload = {
+    userId: string;
     email: string;
-    id: string;
-    fullName?: string;
-    phone?: string;
+    fullName: string;
+    profileImg?: string;
     role: TUserRole
 }
 

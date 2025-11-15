@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
 import config from "../config";
 import { Secret } from "jsonwebtoken";
@@ -8,7 +9,7 @@ import UserModel from "../models/UserModel";
 type TUserRole = "candidate" | "employer" | "admin" | "superAdmin";
 
 const AuthMiddleware = (...roles: TUserRole[]) => {
-  return async (req: Request & {user?: any}, res: Response, next: NextFunction) : Promise<any> => {
+  return async (req: Request, res: Response, next: NextFunction) : Promise<any> => {
     try {
       const token = req.headers.authorization;
       if (!token) {
@@ -87,11 +88,9 @@ const AuthMiddleware = (...roles: TUserRole[]) => {
         });
       }
 
-      req.user = decoded;
-
-      //set id & email to headers
+      //set userId & email to headers
+      req.headers.userId = decoded.userId;
       req.headers.email = decoded.email;
-      req.headers.id = decoded.id;
       req.headers.role = decoded.role;
 
       next();

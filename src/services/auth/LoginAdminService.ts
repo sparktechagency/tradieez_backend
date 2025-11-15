@@ -36,9 +36,9 @@ const LoginAdminService = async (payload: ILogin) => {
 
 
   //create accessToken
-  const accessToken = createToken({fullName:"Super Admin", email: user.email, id: String(user._id), role: user.role }, config.jwt_access_secret as Secret, config.jwt_access_expires_in as TExpiresIn);
+  const accessToken = createToken({ userId: String(user._id), email: user.email, fullName:"Super Admin", role: user.role }, config.jwt_access_secret as Secret, config.jwt_access_expires_in as TExpiresIn);
   //create refreshToken
-  const refreshToken = createToken({ email: user.email, id: String(user._id), role: user.role }, config.jwt_refresh_secret as Secret, config.jwt_refresh_expires_in as TExpiresIn);
+  const refreshToken = createToken({ userId: String(user._id), email: user.email, fullName:"Super Admin", role: user.role }, config.jwt_refresh_secret as Secret, config.jwt_refresh_expires_in as TExpiresIn);
 
   return {
     accessToken,

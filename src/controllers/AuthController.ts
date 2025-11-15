@@ -27,11 +27,21 @@ const verifyEmail = asyncHandler(async (req, res) => {
 })
 
 const loginUser = asyncHandler(async (req, res) => {
-    const result = await LoginUserService(req.body);
+    const { accessToken, refreshToken } = await LoginUserService(req.body);
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true, 
+        secure: config.node_env === "production", 
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
+        sameSite: "strict", // Prevents CSRF attacks
+    });
+
     res.status(200).json({
         success: true,
         message: "Login Success",
-        data: result
+        data: {
+            accessToken
+        }
     })
 })
 
