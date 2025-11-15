@@ -76,3 +76,41 @@ export const forgotPasswordSetNewPassSchema = z.object({
     .max(60, "Password maximum 60 characters long")
     .trim(),
 });
+
+
+export const changePasswordSchema = z.object({
+  currentPassword: z
+    .string({
+      invalid_type_error: "Current Password must be string",
+      required_error: "Current Password is required",
+    })
+    .min(6, "Current Password minimum 6 characters long")
+    .max(60, "Current Password maximum 60 characters long")
+    .trim(),
+  newPassword: z
+    .string({
+      invalid_type_error: "New Password must be string",
+      required_error: "New Password is required",
+    })
+    .min(6, "New Password minimum 6 characters long")
+    .max(60, "New Password maximum 60 characters long")
+    .trim(),
+})
+.superRefine((data, ctx) => {
+    if (data.newPassword === data.currentPassword) {
+      ctx.addIssue({
+        path: ["newPassword"],
+        message: "New password must be different from the current password.",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+});
+
+
+
+
+export const refreshTokenValidationSchema = z.object({
+  refreshToken: z.string({
+    required_error: "Refresh token is required !",
+  }),
+});

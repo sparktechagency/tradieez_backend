@@ -1,8 +1,10 @@
 import express from "express";
-import { emailValidationSchema, forgotPasswordSetNewPassSchema, loginValidationSchema, verifyOtpValidationSchema } from "../validation/auth.validation";
+import { changePasswordSchema, emailValidationSchema, forgotPasswordSetNewPassSchema, loginValidationSchema, refreshTokenValidationSchema, verifyOtpValidationSchema } from "../validation/auth.validation";
 import validationMiddleware from "../middlewares/validationMiddleware";
 import AuthController from "../controllers/AuthController";
 import { registerEmployerValidationSchema } from "../validation/employer.validation";
+import AuthMiddleware from "../middlewares/AuthMiddleware";
+import { UserRole } from "../constant/user.constant";
 
 const router = express.Router();
 
@@ -52,6 +54,18 @@ router.post(
   "/forgot-password-set-new-password",
   validationMiddleware(forgotPasswordSetNewPassSchema),
   AuthController.forgotPasswordSetNewPassword
+);
+
+router.patch(
+  "/change-password",
+  AuthMiddleware(UserRole.admin, UserRole.superAdmin, UserRole.candidate, UserRole.employer),
+  validationMiddleware(changePasswordSchema),
+  AuthController.changePassword
+);
+router.post(
+  "/refresh-token",
+  validationMiddleware(refreshTokenValidationSchema),
+  AuthController.refreshToken
 );
 
 

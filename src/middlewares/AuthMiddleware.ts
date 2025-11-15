@@ -38,7 +38,7 @@ const AuthMiddleware = (...roles: TUserRole[]) => {
       }
 
       
-      const user = await UserModel.findById(decoded.id);
+      const user = await UserModel.findById(decoded.userId);
 
       //check if user is not exist
       if (!user) {
@@ -46,7 +46,7 @@ const AuthMiddleware = (...roles: TUserRole[]) => {
           success: false,
           message: "You are not authorized",
           error: {
-            message: "This user is not existed",
+            message: "This user doesn't existed",
           },
         });
       }

@@ -1,9 +1,11 @@
 import config from "../config";
+import ChangePasswordService from "../services/auth/ChangePasswordService";
 import ForgotPasswordSendOtpService from "../services/auth/ForgotPasswordSendOtpService";
 import ForgotPasswordSetNewPasswordService from "../services/auth/ForgotPasswordSetNewPasswordService";
 import ForgotPasswordVerifyOtpService from "../services/auth/ForgotPasswordVerifyOtpService";
 import LoginAdminService from "../services/auth/LoginAdminService";
 import LoginUserService from "../services/auth/LoginUserService"
+import RefreshTokenService from "../services/auth/RefreshTokenService";
 import RegisterEmployerService from "../services/auth/RegisterEmployerService";
 import ResendVerificationEmailService from "../services/auth/ResendVerificationEmailService";
 import VerifyEmailService from "../services/auth/VerifyEmailService";
@@ -104,7 +106,38 @@ const forgotPasswordSetNewPassword = asyncHandler(async (req, res) => {
     const result = await ForgotPasswordSetNewPasswordService(req.body);
     res.status(200).json({
         success: true,
-        message: "Password has been reset successfully.",
+        message: "Your password has been updated successfully.",
+        data: result
+    })
+})
+
+const changePassword = asyncHandler(async (req, res) => {
+    const loginUserId = req.headers.userId;
+    const { accessToken, refreshToken } = await ChangePasswordService(loginUserId as string, req.body);
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: config.node_env === "production",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        sameSite: "strict", // Prevents CSRF attacks
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Your password has been updated successfully.",
+        data: {
+            accessToken
+        }
+    })
+})
+
+
+const refreshToken = asyncHandler(async (req, res) => {
+    const { refreshToken } = req.cookies;
+    const result = await RefreshTokenService(refreshToken);
+    res.status(200).json({
+        success: true,
+       message: 'Access token is retrieved successfully',
         data: result
     })
 })
@@ -118,7 +151,9 @@ const AuthController = {
     loginAdmin,
     forgotPasswordSendOtp,
     forgotPasswordVerifyOtp,
-    forgotPasswordSetNewPassword
+    forgotPasswordSetNewPassword,
+    changePassword,
+    refreshToken
 }
 
 export default AuthController;
