@@ -88,7 +88,7 @@ const AuthMiddleware = (...roles: TUserRole[]) => {
         });
       }
 
-      //set userId & email to headers
+      //set userId, email, role to headers
       req.headers.userId = decoded.userId;
       req.headers.email = decoded.email;
       req.headers.role = decoded.role;
