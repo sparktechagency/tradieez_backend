@@ -11,7 +11,6 @@ const CreateCategoryService = async ( req: any, payload: ICategory) => {
     
     const slug = convertToSlug(name);
 
-    //const file = file ;
     if (!req.file) {
         throw new CustomError(400, "Upload an image");
     }

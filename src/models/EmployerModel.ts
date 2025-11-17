@@ -6,7 +6,8 @@ const employerSchema = new Schema<IEmployer>({
         type: Schema.Types.ObjectId,
         required: [true, "userId is required"],
         trim: true,
-        unique: true
+        unique: true,
+        ref: "User"
     },
     fullName: {
         type: String,

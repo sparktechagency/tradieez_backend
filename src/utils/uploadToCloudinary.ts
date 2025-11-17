@@ -3,7 +3,9 @@ import cloudinary from "../helper/cloudinary";
 
 const uploadToCloudinary = async (path: string) => {
   try { 
-    const result = await cloudinary.uploader.upload(path);
+    const result = await cloudinary.uploader.upload(path, {
+      folder: 'Tradiezz',
+    });
     return result.secure_url;
 
   } catch (err:any) {
