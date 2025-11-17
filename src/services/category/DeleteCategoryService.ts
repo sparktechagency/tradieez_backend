@@ -1,5 +1,6 @@
 import CustomError from "../../errors/CustomError";
 import CategoryModel from "../../models/CategoryModel";
+import SubCategoryModel from "../../models/SubCategoryModel";
 import isNotObjectId from "../../utils/isNotObjectId";
 
 const DeleteCategoryService = async (categoryId: string) => {
@@ -11,13 +12,13 @@ const DeleteCategoryService = async (categoryId: string) => {
         throw new CustomError(404, 'This categoryId not found');
     }
 
-    //check if categoryId is associated with Product
-    // const associateWithProduct = await ProductModel.findOne({
-    //      categoryId
-    // });
-    // if(associateWithProduct){
-    //     throw new CustomError(409, 'Failled to delete, This category is associated with Product');
-    // }
+    //check if categoryId is associated with subCategory
+    const associateWithSubCategory = await SubCategoryModel.findOne({
+         categoryId
+    });
+    if(associateWithSubCategory){
+        throw new CustomError(409, 'Unable to delete, This category is associated with sub-category');
+    }
 
     const result = await CategoryModel.deleteOne({ _id: categoryId})
     return result;
