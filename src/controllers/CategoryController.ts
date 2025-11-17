@@ -1,6 +1,7 @@
 import { CategoryValidFields } from "../constant/category.constant";
 import CreateCategoryService from "../services/category/CreateCategoryService";
 import GetCategoriesService from "../services/category/GetCategoriesService";
+import GetCategoryDropDownService from "../services/category/GetCategoryDropDownService";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
 
@@ -25,12 +26,22 @@ const getCategories = asyncHandler(async (req, res) => {
     })
 })
 
+const getCategoryDropDown = asyncHandler(async (req, res) => {
+    const result = await GetCategoryDropDownService();
+    res.status(200).json({
+        success: true,
+        message: 'Categories are retrieved successfully',
+        data: result
+    })
+})
+
 
 
 
 const CategoryController = {
     createCategory,
-    getCategories
+    getCategories,
+    getCategoryDropDown
 }
 
 export default CategoryController

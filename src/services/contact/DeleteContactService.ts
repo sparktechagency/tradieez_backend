@@ -1,10 +1,10 @@
 import CustomError from "../../errors/CustomError";
 import ContactModel from "../../models/ContactModel";
-import isObjectId from "../../utils/isObjectId";
+import isNotObjectId from "../../utils/isNotObjectId";
 
 
 const DeleteContactService = async (contactId: string) => {
-  if (!isObjectId(contactId)) {
+  if (isNotObjectId(contactId)) {
     throw new CustomError(400, "contactId must be a valid ObjectId")
   }
   const contact = await ContactModel.findById(contactId);

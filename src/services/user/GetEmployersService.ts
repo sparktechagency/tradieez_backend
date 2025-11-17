@@ -63,7 +63,8 @@ const GetEmployersService = async (query: TEmployerQuery) => {
     { $sort: { [sortBy]: sortDirection } }, 
     { $skip: skip }, 
     { $limit: Number(limit) }, 
-  ]);
+  ])
+  .collation({ locale: "en", strength: 2 });
 
      // total count
   const totalCountResult = await EmployerModel.aggregate([

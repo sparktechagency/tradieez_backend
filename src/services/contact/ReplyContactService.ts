@@ -1,10 +1,10 @@
 import CustomError from "../../errors/CustomError";
 import ContactModel from "../../models/ContactModel";
 import sendReplyEmail from "../../utils/email/sendReplyEmail";
-import isObjectId from "../../utils/isObjectId";
+import isNotObjectId from "../../utils/isNotObjectId";
 
 const ReplyContactService = async (contactId: string, replyMessage: string) => {
-  if (!isObjectId(contactId)) {
+  if (isNotObjectId(contactId)) {
     throw new CustomError(400, "contactId must be a valid ObjectId")
   }
   const contact = await ContactModel.findById(contactId);

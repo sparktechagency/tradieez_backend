@@ -1,7 +1,11 @@
 import CustomError from "../../errors/CustomError";
 import UserModel from "../../models/UserModel";
+import isNotObjectId from "../../utils/isNotObjectId";
 
 const ChangeStatusService = async (userId: string, status: 'active' | 'blocked') => {
+    if (isNotObjectId(userId)) {
+        throw new CustomError(400, "userId must be a valid ObjectId")
+    }
 
     const user = await UserModel.findById(userId);
     if (!user) {

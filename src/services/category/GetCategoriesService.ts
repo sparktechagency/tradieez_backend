@@ -50,7 +50,7 @@ const GetCategoriesService = async (query: TCategoryQuery) => {
         },
         { $skip: skip },
         { $limit: Number(limit) },
-    ]);
+    ]).collation({ locale: "en", strength: 2 });
 
     // total count
     const totalCountResult = await CategoryModel.aggregate([

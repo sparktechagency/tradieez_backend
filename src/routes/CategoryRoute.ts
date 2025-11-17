@@ -22,6 +22,10 @@ router.get(
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
   CategoryController.getCategories
 );
+router.get(
+  '/get-category-drop-down',
+  CategoryController.getCategoryDropDown
+);
 
 const CategoryRoute = router;
 export default CategoryRoute;
