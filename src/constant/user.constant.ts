@@ -17,3 +17,11 @@ export const EmployerValidFields: string[] = [
   "sortOrder",
   "status"
 ];
+
+export const UserCandidateValidFields: string[] = [
+  "searchTerm",
+  "page",
+  "limit",
+  "sortBy",
+  "sortOrder",
+];

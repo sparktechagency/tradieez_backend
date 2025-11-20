@@ -1,7 +1,9 @@
-import { EmployerValidFields } from "../constant/user.constant";
+import { EmployerValidFields, UserCandidateValidFields } from "../constant/user.constant";
 import GetCandidatesService from "../services/user/GetCandidatesService";
 import GetEmployersService from "../services/user/GetEmployersService";
 import GetSingleCandidateService from "../services/user/GetSingleCandidateService";
+import GetUserCandidatesService from "../services/user/GetFindCandidatesService";
+import GetUserCandidates from "../services/user/GetFindCandidatesService";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
 
@@ -28,6 +30,17 @@ const getCandidates = asyncHandler(async (req, res) => {
     })
 })
 
+const getUserCandidates = asyncHandler(async (req, res) => {
+    const validatedQuery = pickValidFields(req.query, UserCandidateValidFields);
+    const result = await GetUserCandidatesService(validatedQuery);
+    res.status(200).json({
+        success: true,
+        message: 'Candidates are retrieved successfully',
+        meta: result.meta,
+        data: result.data
+    })
+})
+
 
 const getSingleCandidate = asyncHandler(async (req, res) => {
     const { userId } = req.params;
@@ -44,6 +57,7 @@ const getSingleCandidate = asyncHandler(async (req, res) => {
 const UserController = {
     getEmployers,
     getCandidates,
+    getUserCandidates,
     getSingleCandidate
 }
 
