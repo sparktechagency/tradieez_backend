@@ -1,6 +1,6 @@
 import { EmployerSearchableFields } from "../../constant/user.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
-import { TEmployerQuery } from "../../interfaces/user.interface";
+import { TEmployerQuery } from "../../interfaces/employer.interface";
 import EmployerModel from "../../models/EmployerModel";
 
 const GetEmployersService = async (query: TEmployerQuery) => {

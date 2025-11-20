@@ -10,6 +10,16 @@ router.get(
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
   UserController.getEmployers
 );
+router.get(
+  '/get-candidates',
+  AuthMiddleware(UserRole.admin, UserRole.superAdmin),
+  UserController.getCandidates
+);
+router.get(
+  '/get-single-candidate/:userId',
+  AuthMiddleware(UserRole.admin, UserRole.superAdmin),
+  UserController.getSingleCandidate
+);
 
 
 const UserRoute = router;

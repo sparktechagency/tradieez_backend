@@ -1,7 +1,7 @@
 import { EmployerSearchableFields } from "../../constant/user.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
-import { TEmployerQuery } from "../../interfaces/user.interface";
-import EmployerModel from "../../models/EmployerModel";
+import { TEmployerQuery } from "../../interfaces/employer.interface";
+import CandidateModel from "../../models/CandidateModel";
 
 const GetCandidatesService = async (query: TEmployerQuery) => {
   const {
@@ -30,7 +30,7 @@ const GetCandidatesService = async (query: TEmployerQuery) => {
   if (filters) {
     filterQuery = makeFilterQuery(filters);
   }
-  const result = await EmployerModel.aggregate([
+  const result = await CandidateModel.aggregate([
     {
         $lookup: {
             from: "users",
@@ -50,6 +50,9 @@ const GetCandidatesService = async (query: TEmployerQuery) => {
             email:1,
             phone:1,
             profileImg:1,
+            ratings:1,
+            availableDate:1,
+            address:1,
             status: "$user.status",
             createdAt: "$createdAt"
         }
@@ -67,7 +70,7 @@ const GetCandidatesService = async (query: TEmployerQuery) => {
   .collation({ locale: "en", strength: 2 });
 
      // total count
-  const totalCountResult = await EmployerModel.aggregate([
+  const totalCountResult = await CandidateModel.aggregate([
    {
         $lookup: {
             from: "users",
@@ -86,7 +89,6 @@ const GetCandidatesService = async (query: TEmployerQuery) => {
             fullName:1,
             email:1,
             phone:1,
-            profileImg:1,
             status: "$user.status",
             createdAt: "$createdAt"
         }

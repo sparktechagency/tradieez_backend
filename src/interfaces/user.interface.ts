@@ -18,11 +18,3 @@ export interface IUser extends Document {
 };
 
 
-export type TEmployerQuery = {
-  searchTerm?: string;
-  page?: string;
-  limit?: string;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
-  status?: string,
-};

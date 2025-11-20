@@ -7,4 +7,15 @@ export interface IEmployer extends Document{
     email: string;
     phone: string;
     profileImg: string;
+    ratings: number;
 }
+
+export type TEmployerQuery = {
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  status?: string,
+  ratings?:number;
+};
