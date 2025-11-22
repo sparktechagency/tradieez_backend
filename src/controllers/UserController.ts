@@ -2,12 +2,13 @@ import { EmployerValidFields, UserCandidateValidFields } from "../constant/user.
 import GetCandidatesService from "../services/user/GetCandidatesService";
 import GetEmployersService from "../services/user/GetEmployersService";
 import GetSingleCandidateService from "../services/user/GetSingleCandidateService";
-import GetUserCandidatesService from "../services/user/GetFindCandidatesService";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
 import GetFindCandidatesService from "../services/user/GetFindCandidatesService";
 import { TUserRole } from "../interfaces/user.interface";
 import GetMyProfileService from "../services/user/GetMyProfileService";
+import UpdateCandidateProfileService from "../services/user/UpdateCandidateProfileService";
+import GetCandidateService from "../services/user/GetCandidateService";
 
 
 const getEmployers = asyncHandler(async (req, res) => {
@@ -54,6 +55,16 @@ const getSingleCandidate = asyncHandler(async (req, res) => {
     })
 })
 
+const getCandidate = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const result = await GetCandidateService(userId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Candidate is retrieved successfully',
+        data: result
+    })
+})
+
 
 const getMyProfile = asyncHandler(async (req, res) => {
     const { userId, role } = req.headers;
@@ -65,6 +76,16 @@ const getMyProfile = asyncHandler(async (req, res) => {
     })
 })
 
+const updateCandidateProfile = asyncHandler(async (req, res) => {
+    const { userId } = req.headers;
+    const result = await UpdateCandidateProfileService(userId as string, req, req.body);
+    res.status(200).json({
+        success: true,
+        message: 'Profile is updated successfully',
+        data: result
+    })
+})
+
 
 
 const UserController = {
@@ -72,7 +93,9 @@ const UserController = {
     getCandidates,
     getFindCandidates,
     getSingleCandidate,
-    getMyProfile
+    getCandidate,
+    getMyProfile,
+    updateCandidateProfile
 }
 
 export default UserController;

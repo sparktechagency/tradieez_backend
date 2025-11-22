@@ -2,13 +2,12 @@ import { Types } from "mongoose";
 import CandidateModel from "../../models/CandidateModel";
 import CustomError from "../../errors/CustomError";
 
-const GetSingleCandidateService = async (userId: string) => {
+const GetCandidateService = async (userId: string) => {
 
     const result = await CandidateModel.aggregate([
         {
             $match: {
                 userId: new Types.ObjectId(userId),
-                isPrivate: true
             }
         },
         {
@@ -65,6 +64,7 @@ const GetSingleCandidateService = async (userId: string) => {
                 employmentType:1,
                 skills:1,
                 experience:1,
+                isPrivate:1,
                 category: "$category.name",
                 subCategory: "$subcategory.name",
                 address:"$address",
@@ -76,10 +76,10 @@ const GetSingleCandidateService = async (userId: string) => {
     ])
 
     if(result.length===0){
-        throw new CustomError(404, "Candidate not found or profile is private/locked");
+        throw new CustomError(404, "candidateId not found");
     }
 
     return result[0];
 }
 
-export default GetSingleCandidateService;
+export default GetCandidateService;

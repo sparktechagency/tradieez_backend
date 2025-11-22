@@ -2,6 +2,9 @@ import express from "express";
 import AuthMiddleware from "../middlewares/AuthMiddleware";
 import { UserRole } from "../constant/user.constant";
 import UserController from "../controllers/UserController";
+import validationMiddleware from "../middlewares/validationMiddleware";
+import { updateCandidateSchema } from "../validation/candidate.validation";
+import upload from "../helper/upload";
 
 const router = express.Router();
 
@@ -22,12 +25,25 @@ router.get(
 );
 router.get(
   '/get-single-candidate/:userId',
+  AuthMiddleware("employer"),
   UserController.getSingleCandidate
+);
+router.get(
+  '/get-candidate/:userId',
+  AuthMiddleware("admin", "superAdmin"),
+  UserController.getCandidate
 );
 router.get(
   '/get-my-profile',
   AuthMiddleware("admin", "superAdmin", "candidate", "employer"),
   UserController.getMyProfile
+);
+router.patch(
+  '/update-candidate-profile',
+  AuthMiddleware("candidate"),
+  upload.single("image"),
+  validationMiddleware(updateCandidateSchema),
+  UserController.updateCandidateProfile
 );
 
 

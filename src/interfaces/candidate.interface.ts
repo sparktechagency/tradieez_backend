@@ -28,3 +28,27 @@ export interface ICandidate extends Document {
     experience: TExperience,
     isPrivate: boolean
 }
+
+
+export interface IUpdateCandidatePayload {
+    fullName: string;
+    phone: string;
+    profileImg: string;
+    categoryId: Types.ObjectId;
+    subCategoryId: Types.ObjectId;
+    ratings: number;
+    workRate: TWorkRate;
+    workType: TWorkType;
+    availableDate: Date;
+    employmentType: TEmploymentType;
+    location: {
+        type: 'Point';
+        coordinates: [number, number]; // [longitude, latitude]
+    };
+    longitude: number;
+    latitude: number;
+    address: string;
+    skills: string[];
+    experience: TExperience,
+    isPrivate: boolean
+}
