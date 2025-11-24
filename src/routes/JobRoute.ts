@@ -13,6 +13,11 @@ router.post(
   validationMiddleware(createJobValidationSchema),
   JobController.createJob
 );
+router.get(
+  "/get-my-jobs",
+  AuthMiddleware('employer'),
+  JobController.getMyJobs
+);
 
 
 const JobRoute = router;

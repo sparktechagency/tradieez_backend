@@ -4,7 +4,7 @@ import CategoryModel from "../../models/CategoryModel";
 import JobModel from "../../models/Job.Model";
 
 
-const CreateJobService = async (payload: IJobPayload) => {
+const CreateJobService = async (loginUserId: string, payload: IJobPayload) => {
     const { categoryId, longitude, latitude } = payload;
 
     //check categoryId
@@ -20,8 +20,11 @@ const CreateJobService = async (payload: IJobPayload) => {
     }
 
     //create job
-    const result = await JobModel.create(payload);
-    return result;
+    await JobModel.create({
+        ...payload,
+        userId: loginUserId
+    });
+    return null;
 }
 
 export default CreateJobService;

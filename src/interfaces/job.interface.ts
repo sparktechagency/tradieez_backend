@@ -6,6 +6,7 @@ type TJobRateType = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'annual';
 
 
 export interface IJob extends Document{
+    userId: Types.ObjectId;
     title: string;
     categoryId: Types.ObjectId;
     jobType: TJobType;
@@ -53,3 +54,18 @@ export interface IJobPayload{
     description: string;
     status: 'visible' | 'hidden';
 }
+
+
+
+export type TJobQuery = {
+    searchTerm?: string;
+    page?: string;
+    limit?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+    status?: string,
+    categoryId?: Types.ObjectId;
+    jobType?: TJobType;
+    experience?: TJobExperience;
+    rateType?: TJobRateType;
+};

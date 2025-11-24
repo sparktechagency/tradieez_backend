@@ -3,6 +3,11 @@ import { IJob } from "../interfaces/job.interface";
 
 
 const jobSchema = new Schema<IJob>({
+    userId: {
+        type: Schema.Types.ObjectId,
+        required: [true, "userId is required"],
+        ref: "User"
+    },
     title: {
         type: String,
         required: [true, 'title is required'],
