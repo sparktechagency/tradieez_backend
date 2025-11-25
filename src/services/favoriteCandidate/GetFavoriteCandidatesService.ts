@@ -1,10 +1,10 @@
 import { Types } from "mongoose";
 import { FavouriteCandidateSearchFields } from "../../constant/favoriteCandidate.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
-import { TFavouriteCandidateQuery } from "../../interfaces/favoriteCandidate.interface";
 import FavoriteCandidateModel from "../../models/FavoriteCandidateModel";
+import { TFavoriteCandidateQuery } from "../../interfaces/favouriteCandidate.interface";
 
-const GetFavoriteCandidateService = async (loginEmployerUserId: string, query: TFavouriteCandidateQuery) => {
+const GetFavoriteCandidateService = async (loginEmployerUserId: string, query: TFavoriteCandidateQuery) => {
     
   // 1. Extract query parameters
   const {

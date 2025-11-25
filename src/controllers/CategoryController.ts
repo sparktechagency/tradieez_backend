@@ -1,7 +1,6 @@
 import { CategoryValidFields } from "../constant/category.constant";
 import CreateCategoryService from "../services/category/CreateCategoryService";
 import DeleteCategoryService from "../services/category/DeleteCategoryService";
-import GetAdminCategoryDropDownService from "../services/category/GetCategoryOptionsService";
 import GetCategoriesService from "../services/category/GetCategoriesService";
 import GetCategoryDropDownService from "../services/category/GetCategoryDropDownService";
 import UpdateCategoryService from "../services/category/UpdateCategoryService";

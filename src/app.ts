@@ -14,6 +14,7 @@ import SubCategoryRoute from "./routes/SubCategoryRoute";
 import FavoriteCandidateRoute from "./routes/FavoriteCandidateRoute";
 import JobRoute from "./routes/JobRoute";
 import FavoriteJobRoute from "./routes/FavoriteJobRoute";
+import BlogCategoryRoute from "./routes/BlogCategoryRoute";
 
 
 const app: Application = express();
@@ -69,6 +70,7 @@ app.use('/api/v1/auth', AuthRoute);
 app.use('/api/v1/user', UserRoute);
 app.use('/api/v1/contact', ContactRoute);
 app.use('/api/v1/category', CategoryRoute);
+app.use('/api/v1/blog-category', BlogCategoryRoute);
 app.use('/api/v1/sub-category', SubCategoryRoute);
 app.use('/api/v1/favorite-candidate', FavoriteCandidateRoute);
 app.use('/api/v1/favorite-job', FavoriteJobRoute);
