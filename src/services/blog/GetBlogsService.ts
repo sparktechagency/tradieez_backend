@@ -67,7 +67,6 @@ const GetBlogsService = async (query: TBlogQuery) => {
                 category: "$category.name",
                 image: "$image",
                 view: "$view",
-                description: "$description",
                 status: "$status",
                 createdAt: "$createdAt",
                 updatedAt: "$updatedAt"
@@ -106,7 +105,6 @@ const GetBlogsService = async (query: TBlogQuery) => {
                 category: "$category.name",
                 image: "$image",
                 view: "$view",
-                description: "$description",
                 status: "$status",
                 createdAt: "$createdAt",
                 updatedAt: "$updatedAt"

@@ -1,13 +1,13 @@
-import { CategoryValidFields } from "../constant/category.constant";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
-import UpdateBlogCategoryService from "../services/blogCategory/UpdateBlogCategoryService";
-import GetBlogCategoryDropDownService from "../services/blogCategory/GetBlogCategoryDropDownService";
-import DeleteBlogCategoryService from "../services/blogCategory/DeleteBlogCategoryService";
 import CreateBlogService from "../services/blog/CreateBlogService";
 import GetBlogsService from "../services/blog/GetBlogsService";
 import { BlogValidFields } from "../constant/blog.constant";
 import GetUserBlogsService from "../services/blog/GetUserBlogsService";
+import UpdateBlogService from "../services/blog/UpdateBlogService";
+import DeleteBlogService from "../services/blog/DeleteBlogService";
+import GetSingleBlogService from "../services/blog/GetSingleBlogService";
+import GetBlogService from "../services/blog/GetBlogService";
 
 
 const createBlog = asyncHandler(async (req, res) => {
@@ -42,31 +42,41 @@ const getBlogs = asyncHandler(async (req, res) => {
 })
 
 const getSingleBlog = asyncHandler(async (req, res) => {
-    const result = await GetBlogCategoryDropDownService();
+     const { blogId } = req.params;
+    const result = await GetSingleBlogService(blogId as string);
     res.status(200).json({
         success: true,
-        message: 'Blog-category drop-down are retrieved successfully',
+        message: 'Blog is retrieved successfully',
+        data: result
+    })
+})
+const getBlog = asyncHandler(async (req, res) => {
+     const { blogId } = req.params;
+    const result = await GetBlogService(blogId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Blog is retrieved successfully',
         data: result
     })
 })
 
 
 const updateBlog = asyncHandler(async (req, res) => {
-    const { categoryId } = req.params;
-    const result = await UpdateBlogCategoryService(categoryId as string, req.body);
+    const { blogId } = req.params;
+    const result = await UpdateBlogService(req, blogId as string, req.body);
     res.status(200).json({
         success: true,
-        message: "Blog-category is updated successfully",
+        message: "Blog is updated successfully",
         data: result
     })
 })
 
 const deleteBlog = asyncHandler(async (req, res) => {
-    const { categoryId } = req.params;
-    const result = await DeleteBlogCategoryService(categoryId as string);
+    const { blogId } = req.params;
+    const result = await DeleteBlogService(blogId as string);
     res.status(200).json({
         success: true,
-        message: "Blog-category is deleted successfully",
+        message: "Blog is deleted successfully",
         data: result
     })
 })
@@ -77,6 +87,7 @@ const BlogController = {
     getUserBlogs,
     getBlogs,
     getSingleBlog,
+    getBlog,
     updateBlog,
     deleteBlog,
 }

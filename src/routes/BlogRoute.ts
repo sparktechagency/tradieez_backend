@@ -21,7 +21,15 @@ router.get(
   '/get-user-blogs',
   BlogController.getUserBlogs
 );
-
+router.get(
+  '/get-single-blog/:blogId',
+  BlogController.getSingleBlog
+);
+router.get(
+  '/get-blog/:blogId',
+  AuthMiddleware(UserRole.admin, UserRole.superAdmin),
+  BlogController.getBlog
+);
 router.get(
   '/get-blogs',
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
