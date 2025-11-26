@@ -18,6 +18,11 @@ router.post(
 );
 
 router.get(
+  '/get-user-blogs',
+  BlogController.getUserBlogs
+);
+
+router.get(
   '/get-blogs',
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
   BlogController.getBlogs

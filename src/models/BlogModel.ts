@@ -5,16 +5,11 @@ import { IBlog } from "../interfaces/blog.interface";
 const blogSchema = new Schema<IBlog>({
     categoryId: {
         type: Schema.Types.ObjectId,
-        required: [true, "categoryId is required"],
+        required: [true, "blogCategoryId is required"],
         trim: true,
         ref: "BlogCategory"
     },
     title: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    description: {
         type: String,
         required: true,
         trim: true,
@@ -24,10 +19,16 @@ const blogSchema = new Schema<IBlog>({
         required: true,
         trim: true,
     },
+    description: {
+        type: String,
+        required: true,
+        trim: true,
+    },
+
     view: {
         type: Number,
-        trim:true,
-        default:0
+        trim: true,
+        default: 0
     },
     status: {
         type: String,

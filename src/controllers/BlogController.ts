@@ -2,10 +2,12 @@ import { CategoryValidFields } from "../constant/category.constant";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
 import UpdateBlogCategoryService from "../services/blogCategory/UpdateBlogCategoryService";
-import GetBlogCategoriesService from "../services/blogCategory/GetBlogCategoriesService";
 import GetBlogCategoryDropDownService from "../services/blogCategory/GetBlogCategoryDropDownService";
 import DeleteBlogCategoryService from "../services/blogCategory/DeleteBlogCategoryService";
 import CreateBlogService from "../services/blog/CreateBlogService";
+import GetBlogsService from "../services/blog/GetBlogsService";
+import { BlogValidFields } from "../constant/blog.constant";
+import GetUserBlogsService from "../services/blog/GetUserBlogsService";
 
 
 const createBlog = asyncHandler(async (req, res) => {
@@ -17,9 +19,20 @@ const createBlog = asyncHandler(async (req, res) => {
     })
 })
 
+const getUserBlogs = asyncHandler(async (req, res) => {
+    const validatedQuery = pickValidFields(req.query, BlogValidFields);
+    const result = await GetUserBlogsService(validatedQuery);
+    res.status(200).json({
+        success: true,
+        message: 'Blogs are retrieved successfully',
+        meta: result.meta,
+        data: result.data
+    })
+})
+
 const getBlogs = asyncHandler(async (req, res) => {
-    const validatedQuery = pickValidFields(req.query, CategoryValidFields);
-    const result = await GetBlogCategoriesService(validatedQuery);
+    const validatedQuery = pickValidFields(req.query, BlogValidFields);
+    const result = await GetBlogsService(validatedQuery);
     res.status(200).json({
         success: true,
         message: 'Blogs are retrieved successfully',
@@ -61,6 +74,7 @@ const deleteBlog = asyncHandler(async (req, res) => {
 
 const BlogController = {
     createBlog,
+    getUserBlogs,
     getBlogs,
     getSingleBlog,
     updateBlog,
