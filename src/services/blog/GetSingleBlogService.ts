@@ -42,6 +42,7 @@ const GetSingleBlogService = async (blogId: string) => {
                 category: "$category.name",
                 image: "$image",
                 view: "$view",
+                description: "$description",
                 createdAt: "$createdAt",
                 updatedAt: "$updatedAt"
             },

@@ -35,6 +35,7 @@ const GetBlogService = async (blogId: string) => {
                 image: "$image",
                 view: "$view",
                 statu: "$status",
+                description: "$description",
                 createdAt: "$createdAt",
                 updatedAt: "$updatedAt"
             },
