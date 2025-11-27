@@ -38,7 +38,8 @@ app.use(
       "http://10.10.20.24:5173",
       "http://10.10.20.24:3000",
       "https://triplemcompany.com",
-      "https://dashboard.triplemcompany.com"
+      "https://dashboard.triplemcompany.com",
+      "https://tradiezz-dashboard.vercel.app"
     ],
     credentials: true,
   }),
