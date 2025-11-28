@@ -35,7 +35,7 @@ const ChangePasswordService = async (loginUserId: string, payload: IChangePasswo
     //update the password
     await UserModel.updateOne(
         { _id: loginUserId },
-        { password: hashPass, passwordChangedAt: new Date() }
+        { password: hashPass, passwordChangedAt: new Date(Date.now() - 20000) }
     );
 
     if (user.role === "employer") {

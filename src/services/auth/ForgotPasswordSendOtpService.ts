@@ -1,6 +1,7 @@
 import CustomError from "../../errors/CustomError";
 import UserModel from "../../models/UserModel";
 import sendForgotEmail from "../../utils/email/sendForgotEmail";
+import generateOTP from "../../utils/generateOTP";
 
 const ForgotPasswordSendOtpService = async (email: string) => {
   const user = await UserModel.findOne({ email });
@@ -18,7 +19,7 @@ const ForgotPasswordSendOtpService = async (email: string) => {
     throw new CustomError(403, "Your account is blocked !");
   }
 
-  const otp = Math.floor(100000 + Math.random() * 900000);
+  const otp = generateOTP();
 
   //set the forgot otp
   await UserModel.updateOne({ email }, { forgotOtp: otp, forgotOtpstatus: 0, forgotOtpExpires: new Date(+new Date() + 600000) });
