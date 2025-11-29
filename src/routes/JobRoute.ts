@@ -46,8 +46,12 @@ router.get(
   JobController.getMySingleJob
 );
 router.get(
-  "/get-single-job/:jobId",
+  "/get-job/:jobId",
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
+  JobController.getJob
+);
+router.get(
+  "/get-single-job/:jobId",
   JobController.getSingleJob
 );
 router.delete(

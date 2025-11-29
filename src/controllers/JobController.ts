@@ -3,6 +3,7 @@ import CreateJobService from "../services/job/CreateJobService";
 import DeleteJobService from "../services/job/DeleteJobService";
 import DeleteMyJobService from "../services/job/DeleteMyJobService";
 import GetCandidateJobsService from "../services/job/GetCandidateJobsService";
+import GetJobService from "../services/job/GetJobService";
 import GetJobsService from "../services/job/GetJobsService";
 import GetMyJobsService from "../services/job/GetMyJobsService";
 import GetMySingleJobService from "../services/job/GetMySingleJobService";
@@ -91,6 +92,16 @@ const getMySingleJob = asyncHandler(async (req, res) => {
     })
 })
 
+const getJob = asyncHandler(async (req, res) => {
+    const { jobId } = req.params;
+    const result = await GetJobService(jobId as string);
+    res.status(200).json({
+        success: true,
+        message: "Job is retrieved successfully",
+        data: result
+    })
+})
+
 const getSingleJob = asyncHandler(async (req, res) => {
     const { jobId } = req.params;
     const result = await GetSingleJobService(jobId as string);
@@ -129,6 +140,7 @@ const JobController = {
     getJobs,
     updateMyJob,
     getMySingleJob,
+    getJob,
     getSingleJob,
     updateJobStatus,
     deleteMyJob,
