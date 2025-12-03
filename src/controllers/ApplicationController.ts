@@ -40,7 +40,7 @@ const getSingleAppliedJob = asyncHandler(async (req, res) => {
     const result = await GetSingleAppliedJobService(candidateUserId as string, jobId as string);
     res.status(200).json({
         success: true,
-        message: 'Applied jobs are retrieved successfully',
+        message: 'Applied job retrieved successfully',
         data: result
     })
 })
