@@ -24,9 +24,14 @@ router.get(
   ApplicationController.getAppliedJobIds
 );
 router.get(
-  "/get-applications/:jobId",
+  "/get-applications",
   AuthMiddleware(UserRole.employer),
   ApplicationController.getApplications
+);
+router.get(
+  "/get-applications/:jobId",
+  AuthMiddleware(UserRole.employer),
+  ApplicationController.getApplicationsByJobId
 );
 router.patch(
   "/update-application/:applicationId",

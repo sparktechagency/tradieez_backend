@@ -1,6 +1,7 @@
 import { APPLICATION_VALID_Fields } from "../constant/application.constant";
 import ApplyJobService from "../services/application/ApplyJobService";
 import DeleteApplicationService from "../services/application/DeleteApplicationService";
+import GetApplicationsByJobIdService from "../services/application/GetApplicationsByJobIdService";
 import GetApplicationsService from "../services/application/GetApplicationsService";
 import GetAppliedJobIdsService from "../services/application/GetAppliedJobIdsService";
 import GetAppliedJobsService from "../services/application/GetAppliedJobsService";
@@ -31,6 +32,7 @@ const getAppliedJobs = asyncHandler(async (req, res) => {
         data: result.data
     })
 })
+
 const getAppliedJobIds = asyncHandler(async (req, res) => {
     const { userId } = req.headers;
     const result = await GetAppliedJobIdsService(userId as string);
@@ -43,9 +45,21 @@ const getAppliedJobIds = asyncHandler(async (req, res) => {
 
 const getApplications = asyncHandler(async (req, res) => {
     const { userId } = req.headers;
+    const validatedQuery = pickValidFields(req.query, APPLICATION_VALID_Fields);
+    const result = await GetApplicationsService(userId as string, validatedQuery);
+    res.status(200).json({
+        success: true,
+        message: 'Applied jobs are retrieved successfully',
+        meta: result.meta,
+        data: result.data
+    })
+})
+
+const getApplicationsByJobId = asyncHandler(async (req, res) => {
+    const { userId } = req.headers;
     const { jobId } = req.params;
     const validatedQuery = pickValidFields(req.query, APPLICATION_VALID_Fields);
-    const result = await GetApplicationsService(userId as string, jobId as string, validatedQuery);
+    const result = await GetApplicationsByJobIdService(userId as string, jobId as string, validatedQuery);
     res.status(200).json({
         success: true,
         message: 'Applied jobs are retrieved successfully',
@@ -81,6 +95,7 @@ const ApplicationController = {
     getAppliedJobs,
     getAppliedJobIds,
     getApplications,
+    getApplicationsByJobId,
     updateApplication,
     deleteApplication
 }

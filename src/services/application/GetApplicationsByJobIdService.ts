@@ -3,8 +3,11 @@ import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
 import ApplicationModel from "../../models/ApplicationModel";
 import { EMPLOYER_APPLICATION_SEARCHABLE_Fields } from "../../constant/application.constant";
 import { TApplicationQuery } from "../../interfaces/application.interface";
+import JobModel from "../../models/Job.Model";
+import CustomError from "../../errors/CustomError";
+import isNotObjectId from "../../utils/isNotObjectId";
 
-const GetApplicationsService = async (loginEmployerUserId: string, query: TApplicationQuery) => {
+const GetApplicationsByJobIdService = async (loginEmployerUserId: string, jobId: string, query: TApplicationQuery) => {
     const {
         searchTerm,
         page = 1,
@@ -13,6 +16,20 @@ const GetApplicationsService = async (loginEmployerUserId: string, query: TAppli
         sortBy = "createdAt",
         ...filters  // Any additional filters
     } = query;
+
+
+    if (isNotObjectId(jobId)) {
+        throw new CustomError(400, "jobId must be a valid ObjectId")
+    }
+
+    //check job
+    const job = await JobModel.findOne({
+        _id: jobId,
+        userId: loginEmployerUserId
+    });
+    if (!job) {
+        throw new CustomError(404, 'Job not found with the provided ID.');
+    }
 
     // 1. Set up pagination
     const skip = (Number(page) - 1) * Number(limit);
@@ -37,6 +54,7 @@ const GetApplicationsService = async (loginEmployerUserId: string, query: TAppli
         {
             $match: {
                 employerUserId: new Types.ObjectId(loginEmployerUserId),
+                jobId: new Types.ObjectId(jobId),
             }
         },
         {
@@ -112,6 +130,7 @@ const GetApplicationsService = async (loginEmployerUserId: string, query: TAppli
          {
             $match: {
                 employerUserId: new Types.ObjectId(loginEmployerUserId),
+                jobId: new Types.ObjectId(jobId),
             }
         },
         {
@@ -194,4 +213,4 @@ const GetApplicationsService = async (loginEmployerUserId: string, query: TAppli
     };
 };
 
-export default GetApplicationsService;
+export default GetApplicationsByJobIdService;
