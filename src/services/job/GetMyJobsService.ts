@@ -61,6 +61,24 @@ const GetMyJobsService = async (loginUserId: string, query: TJobQuery) => {
             $unwind: "$category"
         },
         {
+            $lookup: {
+                from: "applications",
+                let: { jobID: "$_id" },   //$$jobID // <-- variable created here
+                pipeline: [
+                    { $match: { $expr: { $eq: ["$jobId", "$$jobID"] } } },
+                    { $count: "count" },
+                ],
+                as: "applicationCount"
+            }
+        },
+        {
+            $addFields: {
+                applications: {
+                    $ifNull: [{ $arrayElemAt: ["$applicationCount.count", 0] }, 0]
+                }
+            }
+        },
+        {
             $project: {
                 title: 1,
                 categoryId: "$categoryId",
@@ -73,8 +91,9 @@ const GetMyJobsService = async (loginUserId: string, query: TJobQuery) => {
                 address: 1,
                 postalCode: 1,
                 experience: 1,
-                jobType:1,
-                rateType:1,
+                jobType: 1,
+                rateType: 1,
+                applications: "$applications",
                 status: '$status',
                 createdAt: "$createdAt",
                 updatedAt: "$updatedAt"
