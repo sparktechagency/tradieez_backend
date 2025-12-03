@@ -5,6 +5,7 @@ import GetApplicationsByJobIdService from "../services/application/GetApplicatio
 import GetApplicationsService from "../services/application/GetApplicationsService";
 import GetAppliedJobIdsService from "../services/application/GetAppliedJobIdsService";
 import GetAppliedJobsService from "../services/application/GetAppliedJobsService";
+import GetSingleAppliedJobService from "../services/application/GetSingleAppliedJobService";
 import UpdateApplicationService from "../services/application/UpdateApplicationService";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
@@ -33,6 +34,17 @@ const getAppliedJobs = asyncHandler(async (req, res) => {
     })
 })
 
+const getSingleAppliedJob = asyncHandler(async (req, res) => {
+    const { userId:candidateUserId } = req.headers;
+    const { jobId } = req.params;
+    const result = await GetSingleAppliedJobService(candidateUserId as string, jobId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Applied jobs are retrieved successfully',
+        data: result
+    })
+})
+
 const getAppliedJobIds = asyncHandler(async (req, res) => {
     const { userId } = req.headers;
     const result = await GetAppliedJobIdsService(userId as string);
@@ -49,7 +61,7 @@ const getApplications = asyncHandler(async (req, res) => {
     const result = await GetApplicationsService(userId as string, validatedQuery);
     res.status(200).json({
         success: true,
-        message: 'Applied jobs are retrieved successfully',
+        message: 'Applications are retrieved successfully',
         meta: result.meta,
         data: result.data
     })
@@ -62,7 +74,7 @@ const getApplicationsByJobId = asyncHandler(async (req, res) => {
     const result = await GetApplicationsByJobIdService(userId as string, jobId as string, validatedQuery);
     res.status(200).json({
         success: true,
-        message: 'Applied jobs are retrieved successfully',
+         message: 'Applications are retrieved successfully',
         meta: result.meta,
         data: result.data
     })
@@ -94,6 +106,7 @@ const ApplicationController = {
     applyJob,
     getAppliedJobs,
     getAppliedJobIds,
+    getSingleAppliedJob,
     getApplications,
     getApplicationsByJobId,
     updateApplication,

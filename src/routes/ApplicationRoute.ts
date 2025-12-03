@@ -24,6 +24,11 @@ router.get(
   ApplicationController.getAppliedJobIds
 );
 router.get(
+  "/get-single-applied-job/:jobId",
+  AuthMiddleware(UserRole.candidate),
+  ApplicationController.getSingleAppliedJob
+);
+router.get(
   "/get-applications",
   AuthMiddleware(UserRole.employer),
   ApplicationController.getApplications

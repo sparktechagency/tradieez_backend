@@ -8,7 +8,7 @@ const UpdateApplicationService = async (loginEmployerUserId: string, application
         throw new CustomError(400, "applicationId must be a valid ObjectId")
     }
 
-    //check job
+    //check application
     const application = await ApplicationModel.findOne({
         _id: applicationId,
         employerUserId: loginEmployerUserId
