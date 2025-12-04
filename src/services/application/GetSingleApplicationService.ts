@@ -1,37 +1,32 @@
 import { Types } from "mongoose";
 import CustomError from "../../errors/CustomError";
 import ApplicationModel from "../../models/ApplicationModel";
-import JobModel from "../../models/Job.Model";
 import isNotObjectId from "../../utils/isNotObjectId";
 
-const GetSingleAppliedJobService = async (loginCandidateUserId: string, jobId: string) => {
-    if (isNotObjectId(jobId)) {
-        throw new CustomError(400, "jobId must be a valid ObjectId")
+
+const GetSingleApplicationService = async (loginEmployerUserId: string, applicationId: string) => {
+    if (isNotObjectId(applicationId)) {
+        throw new CustomError(400, "applicationId must be a valid ObjectId")
     }
 
-    //check job
-    const job = await JobModel.findOne({ _id: jobId });
-    if (!job) {
-        throw new CustomError(404, 'Job not found with the provided ID');
-    }
 
     const result = await ApplicationModel.aggregate([
         {
             $match: {
-                candidateUserId: new Types.ObjectId(loginCandidateUserId),
-                jobId: new Types.ObjectId(jobId),
+                _id: new Types.ObjectId(applicationId),
+                employerUserId: new Types.ObjectId(loginEmployerUserId)
             }
         },
         {
             $lookup: {
-                from: "employers",
-                localField: "employerUserId",
+                from: "candidates",
+                localField: "candidateUserId",
                 foreignField: "userId",
-                as: "employer"
+                as: "candidate"
             }
         },
         {
-            $unwind: "$employer"
+            $unwind: "$candidate"
         },
         {
             $lookup: {
@@ -57,7 +52,6 @@ const GetSingleAppliedJobService = async (loginCandidateUserId: string, jobId: s
         },
         {
             $project: {
-                _id: 0,
                 jobId: "$jobId",
                 title: "$job.title",
                 category: "$category.name",
@@ -67,31 +61,31 @@ const GetSingleAppliedJobService = async (loginCandidateUserId: string, jobId: s
                 minRange: "$job.minRange",
                 maxRange: "$job.maxRange",
                 address: "$job.address",
-                benefits: "$benefits",
                 postalCode: "$job.postalCode",
                 experience: "$job.experience",
                 jobType: "$job.jobType",
                 rateType: "$job.rateType",
+                benefits: "$job.benefits",
                 skills: "$job.skills",
                 description: "$job.description",
-                employerUserId: "$employerUserId",
-                employerName: "$employer.fullName",
-                employerEmail: "$employer.email",
-                employerPhone: "$employer.phone",
-                employerImg: "$employer.profileImg",
+                candidateUserId: "$candidateUserId",
+                candidateName: "$candidate.fullName",
+                candidateEmail: "$candidate.email",
+                candidatePhone: "$candidate.phone",
+                candidateImg: "$candidate.profileImg",
                 status: '$status',
                 workStatus: "$workStatus",
                 createdAt: "$createdAt",
             }
-        }
+        },
     ])
 
-    if (result.length === 0) {
-        throw new CustomError(404, 'Applied-job not found with the provided ID');
+     if (result.length===0) {
+        throw new CustomError(404, 'Application not found with the provided ID');
     }
 
-    return result[0]
-
+    return result[0];
 }
 
-export default GetSingleAppliedJobService;
+
+export default GetSingleApplicationService;

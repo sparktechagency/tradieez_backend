@@ -2,13 +2,15 @@ import express from 'express';
 import AuthMiddleware from '../middlewares/AuthMiddleware';
 import EmployerReviewController from '../controllers/EmployerReviewController';
 import { UserRole } from '../constant/user.constant';
+import validationMiddleware from '../middlewares/validationMiddleware';
+import { employerReviewSchema } from '../validation/review.validation';
 
 const router = express.Router();
 
 router.post(
     '/post-review',
     AuthMiddleware(UserRole.employer),
-    //validationMiddleware(createReviewValidationSchema),
+    validationMiddleware(employerReviewSchema),
     EmployerReviewController.postReview
 );
 // router.delete(
@@ -20,5 +22,5 @@ router.post(
 // router.get('/get-testimonials', ReviewController.getTestimonials);
 
 
-const ReviewRoutes = router;
-export default ReviewRoutes;
+const EmployerReviewRoute = router;
+export default EmployerReviewRoute;

@@ -38,6 +38,11 @@ router.get(
   AuthMiddleware(UserRole.employer),
   ApplicationController.getApplicationsByJobId
 );
+router.get(
+  "/get-single-application/:applicationId",
+  AuthMiddleware(UserRole.employer),
+  ApplicationController.getSingleApplication
+);
 router.patch(
   "/update-application/:applicationId",
   AuthMiddleware(UserRole.employer),

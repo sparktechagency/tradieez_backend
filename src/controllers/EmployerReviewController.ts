@@ -14,7 +14,7 @@ const postReview = asyncHandler(async (req, res) => {
 
 
 const EmployerReviewController = {
-    postReview,
+    postReview
 }
 
 export default EmployerReviewController;
