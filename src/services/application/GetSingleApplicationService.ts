@@ -51,6 +51,41 @@ const GetSingleApplicationService = async (loginEmployerUserId: string, applicat
             $unwind: "$category"
         },
         {
+            $lookup: {
+                from: "employerreviews",
+                let: {
+                    jobID: "$jobId",
+                    candidateUserID: "$candidateUserId",
+                    employerUserID: new Types.ObjectId(loginEmployerUserId),
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$jobId", "$$jobID"] },
+                                    { $eq: ["$candidateUserId", "$$candidateUserID"] },
+                                    { $eq: ["$employerUserId", "$$employerUserID"] },
+                                ],
+                            },
+                        },
+                    },
+                    { $count: "count" },
+                ],
+                as: "reviewCount",
+            },
+        },
+        {
+            $addFields: {
+                isReview: {
+                    $gt: [
+                        { $ifNull: [{ $arrayElemAt: ["$reviewCount.count", 0] }, 0] },
+                        0
+                    ]
+                }
+            }
+        },
+        {
             $project: {
                 jobId: "$jobId",
                 title: "$job.title",
@@ -75,12 +110,13 @@ const GetSingleApplicationService = async (loginEmployerUserId: string, applicat
                 candidateImg: "$candidate.profileImg",
                 status: '$status',
                 workStatus: "$workStatus",
+                isReview: "$isReview",
                 createdAt: "$createdAt",
             }
         },
     ])
 
-     if (result.length===0) {
+    if (result.length === 0) {
         throw new CustomError(404, 'Application not found with the provided ID');
     }
 

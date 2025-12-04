@@ -26,7 +26,10 @@ export const employerReviewSchema = z.object({
     .refine((val) => val % 0.5 === 0, {
       message: "Rating must be in increments of 0.5",
     }),
-  comment: z.string({
-    required_error: "Comment is required",
-  }),
+  comment: z.
+    string({
+      required_error: "Comment is required",
+      invalid_type_error: "comment value must be string"
+    })
+    .max(500, "Comment value cannot exceed 500 characters")
 });

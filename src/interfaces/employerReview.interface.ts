@@ -6,4 +6,5 @@ export interface IEmployerReview extends Document{
     employerUserId: Types.ObjectId;
     star: number;
     comment: string;
+    isHidden: boolean;
 }
