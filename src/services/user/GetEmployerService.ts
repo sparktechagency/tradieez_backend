@@ -3,7 +3,7 @@ import EmployerModel from "../../models/EmployerModel";
 import isNotObjectId from "../../utils/isNotObjectId";
 import CustomError from "../../errors/CustomError";
 
-const GetSingleEmployerService = async (employerUerId: string) => {
+const GetEmployerService = async (employerUerId: string) => {
     if (isNotObjectId(employerUerId)) {
         throw new CustomError(400, "userId must be a valid ObjectId")
     }
@@ -11,8 +11,7 @@ const GetSingleEmployerService = async (employerUerId: string) => {
     const result = await EmployerModel.aggregate([
         {
             $match: {
-                userId: new Types.ObjectId(employerUerId),
-                status: "active"
+                userId: new Types.ObjectId(employerUerId)
             }
         },
         {
@@ -37,4 +36,4 @@ const GetSingleEmployerService = async (employerUerId: string) => {
     return result[0];
 }
 
-export default GetSingleEmployerService;
+export default GetEmployerService;

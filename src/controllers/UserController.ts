@@ -9,6 +9,8 @@ import { TUserRole } from "../interfaces/user.interface";
 import GetMyProfileService from "../services/user/GetMyProfileService";
 import UpdateCandidateProfileService from "../services/user/UpdateCandidateProfileService";
 import GetCandidateService from "../services/user/GetCandidateService";
+import GetSingleEmployerService from "../services/user/GetSingleEmployerService";
+import GetEmployerService from "../services/user/GetEmployerService";
 
 
 const getEmployers = asyncHandler(async (req, res) => {
@@ -45,7 +47,6 @@ const getFindCandidates = asyncHandler(async (req, res) => {
     })
 })
 
-
 const getSingleCandidate = asyncHandler(async (req, res) => {
     const { userId } = req.params;
     const result = await GetSingleCandidateService(userId as string);
@@ -66,6 +67,24 @@ const getCandidate = asyncHandler(async (req, res) => {
     })
 })
 
+const getSingleEmployer = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const result = await GetSingleEmployerService(userId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Employer is retrieved successfully',
+        data: result
+    })
+})
+const getEmployer = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const result = await GetEmployerService(userId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Employer is retrieved successfully',
+        data: result
+    })
+})
 
 const getMyProfile = asyncHandler(async (req, res) => {
     const { userId, role } = req.headers;
@@ -95,6 +114,8 @@ const UserController = {
     getFindCandidates,
     getSingleCandidate,
     getCandidate,
+    getSingleEmployer,
+    getEmployer,
     getMyProfile,
     updateCandidateProfile
 }

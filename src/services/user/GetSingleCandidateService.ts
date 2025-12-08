@@ -1,13 +1,17 @@
 import { Types } from "mongoose";
 import CandidateModel from "../../models/CandidateModel";
 import CustomError from "../../errors/CustomError";
+import isNotObjectId from "../../utils/isNotObjectId";
 
-const GetSingleCandidateService = async (userId: string) => {
+const GetSingleCandidateService = async (candidateUserId: string) => {
+    if (isNotObjectId(candidateUserId)) {
+        throw new CustomError(400, "userId must be a valid ObjectId")
+    }
 
     const result = await CandidateModel.aggregate([
         {
             $match: {
-                userId: new Types.ObjectId(userId),
+                userId: new Types.ObjectId(candidateUserId),
                 isPrivate: false,
             }
         },
