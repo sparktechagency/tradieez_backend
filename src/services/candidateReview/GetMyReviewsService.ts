@@ -1,10 +1,10 @@
 import { Types } from "mongoose";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
-import EmployerReviewModel from "../../models/EmployerReviewModel";
-import { EMPLOYER_REVIEW_SEARCHABLE_FIELDS } from "../../constant/employerReview.constant";
-import { TEmployerReviewQuery } from "../../interfaces/employerReview.interface";
+import CandidateReviewModel from "../../models/CandidateReviewModel";
+import { CANDIDATE_REVIEW_SEARCHABLE_FIELDS } from "../../constant/candidateReview.constant";
+import { TCandidateReviewQuery } from "../../interfaces/candidateReview.interface";
 
-const GetMyReviewsService = async (loginCandidateUserId: string, query: TEmployerReviewQuery) => {
+const GetMyReviewsService = async (loginEmployerUserId: string, query: TCandidateReviewQuery) => {
 
     // 1. Extract query parameters
     const {
@@ -26,7 +26,7 @@ const GetMyReviewsService = async (loginCandidateUserId: string, query: TEmploye
     //4. setup searching
     let searchQuery = {};
     if (searchTerm) {
-        searchQuery = makeSearchQuery(searchTerm, EMPLOYER_REVIEW_SEARCHABLE_FIELDS);
+        searchQuery = makeSearchQuery(searchTerm, CANDIDATE_REVIEW_SEARCHABLE_FIELDS);
     }
 
     //5 setup filters
@@ -36,10 +36,10 @@ const GetMyReviewsService = async (loginCandidateUserId: string, query: TEmploye
     }
 
 
-    const result = await EmployerReviewModel.aggregate([
+    const result = await CandidateReviewModel.aggregate([
         {
             $match: {
-                candidateUserId: new Types.ObjectId(loginCandidateUserId),
+                employerUserId: new Types.ObjectId(loginEmployerUserId),
             }
         },
         {
@@ -55,25 +55,25 @@ const GetMyReviewsService = async (loginCandidateUserId: string, query: TEmploye
         },
         {
             $lookup: {
-                from: "employers",
-                localField: "employerUserId",
+                from: "candidates",
+                localField: "candidateUserId",
                 foreignField: "userId",
-                as: "employer"
+                as: "candidate"
             }
         },
         {
-            $unwind: "$employer"
+            $unwind: "$candidate"
         },
         {
             $project: {
                 _id: 0,
                 jobId: "$jobId",
                 title: "$job.title",
-                employerUserId: "$employerUserId",
-                employerName: "$employer.fullName",
-                employerEmail: "$employer.email",
-                employerPhone: "$employer.phone",
-                employerImg: "$employer.profileImg",
+                candidateUserId: "$candidateUserId",
+                candidateName: "$candidate.fullName",
+                candidateEmail: "$candidate.email",
+                candidatePhone: "$candidate.phone",
+                candidateImg: "$candidate.profileImg",
                 star: "$star",
                 comment: "$comment",
                 createdAt: "$createdAt",
@@ -92,10 +92,10 @@ const GetMyReviewsService = async (loginCandidateUserId: string, query: TEmploye
 
 
     //count total for pagination
-    const totalResultCount = await EmployerReviewModel.aggregate([
+    const totalResultCount = await CandidateReviewModel.aggregate([
         {
             $match: {
-                candidateUserId: new Types.ObjectId(loginCandidateUserId),
+                employerUserId: new Types.ObjectId(loginEmployerUserId),
             }
         },
         {
@@ -111,25 +111,25 @@ const GetMyReviewsService = async (loginCandidateUserId: string, query: TEmploye
         },
         {
             $lookup: {
-                from: "employers",
-                localField: "employerUserId",
+                from: "candidates",
+                localField: "candidateUserId",
                 foreignField: "userId",
-                as: "employer"
+                as: "candidate"
             }
         },
         {
-            $unwind: "$employer"
+            $unwind: "$candidate"
         },
         {
             $project: {
                 _id: 0,
                 jobId: "$jobId",
                 title: "$job.title",
-                employerUserId: "$employerUserId",
-                employerName: "$employer.fullName",
-                employerEmail: "$employer.email",
-                employerPhone: "$employer.phone",
-                employerImg: "$employer.profileImg",
+                candidateUserId: "$candidateUserId",
+                candidateName: "$candidate.fullName",
+                candidateEmail: "$candidate.email",
+                candidatePhone: "$candidate.phone",
+                candidateImg: "$candidate.profileImg",
                 star: "$star",
                 comment: "$comment",
                 createdAt: "$createdAt",

@@ -8,3 +8,12 @@ export interface IEmployerReview extends Document{
     comment: string;
     isHidden: boolean;
 }
+
+export type TEmployerReviewQuery = {
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  star?: string,
+};

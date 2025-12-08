@@ -13,11 +13,12 @@ router.post(
     validationMiddleware(candidateReviewSchema),
     CandidateReviewController.postReview
 );
-// router.delete(
-//     '/delete-review/:reviewId',
-//      AuthMiddleware(UserRole.admin, UserRole.super_admin), 
-//     ReviewController.deleteRevie
-// )
+router.get(
+    '/get-my-reviews',
+    AuthMiddleware(UserRole.employer),
+    CandidateReviewController.getMyReviews
+);
+
 
 
 

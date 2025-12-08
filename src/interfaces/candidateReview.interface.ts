@@ -8,3 +8,12 @@ export interface ICandidateReview extends Document{
     comment: string;
     isHidden: boolean;
 }
+
+export type TCandidateReviewQuery = {
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
+  star?: string,
+};

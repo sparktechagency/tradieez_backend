@@ -20,13 +20,6 @@ router.get(
     EmployerReviewController.getMyReviews
 );
 
-// router.delete(
-//     '/delete-review/:reviewId',
-//      AuthMiddleware(UserRole.admin, UserRole.super_admin), 
-//     ReviewController.deleteRevie
-// )
-
-
 
 const EmployerReviewRoute = router;
 export default EmployerReviewRoute;

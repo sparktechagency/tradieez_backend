@@ -56,6 +56,41 @@ const GetSingleAppliedJobService = async (loginCandidateUserId: string, jobId: s
             $unwind: "$category"
         },
         {
+            $lookup: {
+                from: "candidatereviews",
+                let: {
+                    jobID: "$jobId",
+                    employerUserID: "$employerUserId",
+                    candidateUserID: new Types.ObjectId(loginCandidateUserId),
+                },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ["$jobId", "$$jobID"] },
+                                    { $eq: ["$candidateUserId", "$$candidateUserID"] },
+                                    { $eq: ["$employerUserId", "$$employerUserID"] },
+                                ],
+                            },
+                        },
+                    },
+                    { $count: "count" },
+                ],
+                as: "reviewCount",
+            },
+        },
+        {
+            $addFields: {
+                isReview: {
+                    $gt: [
+                        { $ifNull: [{ $arrayElemAt: ["$reviewCount.count", 0] }, 0] },
+                        0
+                    ]
+                }
+            }
+        },
+        {
             $project: {
                 _id: 0,
                 jobId: "$jobId",
@@ -81,6 +116,7 @@ const GetSingleAppliedJobService = async (loginCandidateUserId: string, jobId: s
                 employerImg: "$employer.profileImg",
                 status: '$status',
                 workStatus: "$workStatus",
+                isReview: "$isReview",
                 createdAt: "$createdAt",
             }
         }
