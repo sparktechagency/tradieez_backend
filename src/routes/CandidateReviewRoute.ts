@@ -18,9 +18,11 @@ router.get(
     AuthMiddleware(UserRole.employer),
     CandidateReviewController.getMyReviews
 );
-
-
-
+router.get(
+    '/get-employer-reviews/:userId',
+    AuthMiddleware(UserRole.candidate),
+    CandidateReviewController.getEmployerReviews
+);
 
 const CandidateReviewRoute = router;
 export default CandidateReviewRoute;

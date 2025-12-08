@@ -13,13 +13,16 @@ router.post(
     validationMiddleware(employerReviewSchema),
     EmployerReviewController.postReview
 );
-
 router.get(
     '/get-my-reviews',
     AuthMiddleware(UserRole.candidate),
     EmployerReviewController.getMyReviews
 );
-
+router.get(
+    '/get-candidate-reviews/:userId',
+    AuthMiddleware(UserRole.employer),
+    EmployerReviewController.getCandidateReviews
+);
 
 const EmployerReviewRoute = router;
 export default EmployerReviewRoute;

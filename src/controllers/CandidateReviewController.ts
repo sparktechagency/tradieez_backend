@@ -3,6 +3,7 @@ import PostCandidateReviewService from "../services/candidateReview/PostCandidat
 import pickValidFields from "../utils/pickValidFields";
 import { CANDIDATE_REVIEW_VALID_FIELDS } from "../constant/candidateReview.constant";
 import GetMyReviewsService from "../services/candidateReview/GetMyReviewsService";
+import GetEmployerReviewsService from "../services/candidateReview/GetEmployerReviewsService";
 
 
 const postReview = asyncHandler(async (req, res) => {
@@ -27,10 +28,10 @@ const getMyReviews = asyncHandler(async (req, res) => {
     })
 })
 
-const getCandidateReviews = asyncHandler(async (req, res) => {
-    const candidateUserId = req.params.userId;
+const getEmployerReviews = asyncHandler(async (req, res) => {
+    const employerUserId = req.params.userId;
     const validatedQuery = pickValidFields(req.query, CANDIDATE_REVIEW_VALID_FIELDS);
-    const result = await GetMyReviewsService(candidateUserId as string, validatedQuery);
+    const result = await GetEmployerReviewsService(employerUserId as string, validatedQuery);
     res.status(200).json({
         success: true,
         message: "Reviews are retrieved successfully",
@@ -43,7 +44,7 @@ const getCandidateReviews = asyncHandler(async (req, res) => {
 const CandidateReviewController = {
     postReview,
     getMyReviews,
-    getCandidateReviews
+    getEmployerReviews
 }
 
 export default CandidateReviewController;

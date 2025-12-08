@@ -1,13 +1,13 @@
 import { Types } from "mongoose";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
-import EmployerReviewModel from "../../models/EmployerReviewModel";
-import { EMPLOYER_REVIEW_SEARCHABLE_FIELDS } from "../../constant/employerReview.constant";
-import { TEmployerReviewQuery } from "../../interfaces/employerReview.interface";
 import isNotObjectId from "../../utils/isNotObjectId";
 import CustomError from "../../errors/CustomError";
-import CandidateModel from "../../models/CandidateModel";
+import EmployerModel from "../../models/EmployerModel";
+import CandidateReviewModel from "../../models/CandidateReviewModel";
+import { TCandidateReviewQuery } from "../../interfaces/candidateReview.interface";
+import { CANDIDATE_REVIEW_SEARCHABLE_FIELDS } from "../../constant/candidateReview.constant";
 
-const GetCandidateReviewsService = async (candidateUserId: string, query: TEmployerReviewQuery) => {
+const GetEmployerReviewsService = async (employerUserId: string, query: TCandidateReviewQuery) => {
     // 1. Extract query parameters
     const {
         searchTerm,
@@ -18,16 +18,16 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
         ...filters // Any additional filters
     } = query;
 
-    if (isNotObjectId(candidateUserId)) {
+    if (isNotObjectId(employerUserId)) {
         throw new CustomError(400, "userId must be a valid ObjectId")
     }
 
-    //check candidate
-    const candidate = await CandidateModel.findOne({
-        userId: candidateUserId
+    //check employer
+    const employer = await EmployerModel.findOne({
+        userId: employerUserId
     });
-    if (!candidate) {
-        throw new CustomError(404, 'Candidate not found with the provided ID.');
+    if (!employer) {
+        throw new CustomError(404, 'Employer not found with the provided ID.');
     }
 
     // 2. Set up pagination
@@ -39,7 +39,7 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
     //4. setup searching
     let searchQuery = {};
     if (searchTerm) {
-        searchQuery = makeSearchQuery(searchTerm, EMPLOYER_REVIEW_SEARCHABLE_FIELDS);
+        searchQuery = makeSearchQuery(searchTerm, CANDIDATE_REVIEW_SEARCHABLE_FIELDS);
     }
 
     //5 setup filters
@@ -49,10 +49,10 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
     }
 
 
-    const result = await EmployerReviewModel.aggregate([
+    const result = await CandidateReviewModel.aggregate([
         {
             $match: {
-                candidateUserId: new Types.ObjectId(candidateUserId),
+                employerUserId: new Types.ObjectId(employerUserId)
             }
         },
         {
@@ -68,28 +68,28 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
         },
         {
             $lookup: {
-                from: "employers",
-                localField: "employerUserId",
+                from: "candidates",
+                localField: "candidateUserId",
                 foreignField: "userId",
-                as: "employer"
+                as: "candidate"
             }
         },
         {
-            $unwind: "$employer"
+            $unwind: "$candidate"
         },
         {
             $project: {
                 _id: 0,
                 jobId: "$jobId",
                 title: "$job.title",
-                employerUserId: "$employerUserId",
-                employerName: "$employer.fullName",
-                employerEmail: "$employer.email",
-                employerPhone: "$employer.phone",
-                employerImg: "$employer.profileImg",
+                candidateUserId: "$candidateUserId",
+                candidateName: "$candidate.fullName",
+                candidateEmail: "$candidate.email",
+                candidatePhone: "$candidate.phone",
+                candidateImg: "$candidate.profileImg",
                 star: "$star",
                 comment: "$comment",
-                createdAt: "$createdAt",
+                createdAt: "$createdAt"
             }
         },
         {
@@ -105,10 +105,10 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
 
 
     //count total for pagination
-    const totalResultCount = await EmployerReviewModel.aggregate([
+    const totalResultCount = await CandidateReviewModel.aggregate([
         {
             $match: {
-                candidateUserId: new Types.ObjectId(candidateUserId),
+                employerUserId: new Types.ObjectId(employerUserId)
             }
         },
         {
@@ -122,30 +122,30 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
         {
             $unwind: "$job"
         },
-        {
+         {
             $lookup: {
-                from: "employers",
-                localField: "employerUserId",
+                from: "candidates",
+                localField: "candidateUserId",
                 foreignField: "userId",
-                as: "employer"
+                as: "candidate"
             }
         },
         {
-            $unwind: "$employer"
+            $unwind: "$candidate"
         },
         {
             $project: {
                 _id: 0,
                 jobId: "$jobId",
                 title: "$job.title",
-                employerUserId: "$employerUserId",
-                employerName: "$employer.fullName",
-                employerEmail: "$employer.email",
-                employerPhone: "$employer.phone",
-                employerImg: "$employer.profileImg",
+                candidateUserId: "$candidateUserId",
+                candidateName: "$candidate.fullName",
+                candidateEmail: "$candidate.email",
+                candidatePhone: "$candidate.phone",
+                candidateImg: "$candidate.profileImg",
                 star: "$star",
                 comment: "$comment",
-                createdAt: "$createdAt",
+                createdAt: "$createdAt"
             }
         },
         {
@@ -176,4 +176,4 @@ const GetCandidateReviewsService = async (candidateUserId: string, query: TEmplo
 
 
 
-export default GetCandidateReviewsService
+export default GetEmployerReviewsService;
