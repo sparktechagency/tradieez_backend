@@ -50,9 +50,10 @@ const GetCandidatesService = async (query: TEmployerQuery) => {
             email:1,
             phone:1,
             profileImg:1,
-            ratings:1,
             availableDate:1,
             address:1,
+            ratings:"$ratings",
+            totalReviews:"$totalReviews",
             status: "$user.status",
             createdAt: "$createdAt"
         }

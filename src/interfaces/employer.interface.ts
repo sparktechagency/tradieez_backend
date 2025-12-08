@@ -8,6 +8,7 @@ export interface IEmployer extends Document {
   phone: string;
   profileImg: string;
   ratings: number;
+  totalReviews: number;
   location: {
     type: 'Point';
     coordinates: [number, number]; // [longitude, latitude]

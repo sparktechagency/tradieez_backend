@@ -3,15 +3,13 @@ import mongoose, { Types } from "mongoose";
 import CustomError from "../../errors/CustomError";
 import { IEmployerReview } from "../../interfaces/employerReview.interface";
 import ApplicationModel from "../../models/ApplicationModel";
-import EmployerReviewModel from "../../models/EmployerReviewModel";
-import CandidateModel from "../../models/CandidateModel";
 import JobModel from "../../models/Job.Model";
+import EmployerModel from "../../models/EmployerModel";
+import CandidateReviewModel from "../../models/CandidateReviewModel";
 
 
-const PostCandidateReviewService = async (loginEmployerUserId: string, payload: IEmployerReview) => {
-    const { jobId, candidateUserId } = payload;
-
-    return loginEmployerUserId;
+const PostCandidateReviewService = async (loginCandidateUserId: string, payload: IEmployerReview) => {
+    const { jobId, employerUserId } = payload;
 
     //check job
     const job = await JobModel.findById(jobId);
@@ -19,19 +17,19 @@ const PostCandidateReviewService = async (loginEmployerUserId: string, payload: 
         throw new CustomError(404, 'jobId not found');
     }
 
-    //check candidate
-    const candidate = await CandidateModel.findOne({
-        userId: candidateUserId
+    //check employer
+    const employer = await EmployerModel.findOne({
+        userId: employerUserId
     });
-    if (!candidate) {
-        throw new CustomError(404, "Candidate Not Found with this provided ID");
+    if (!employer) {
+        throw new CustomError(404, "Employer Not Found with this provided ID");
     }
 
     //check application
     const application = await ApplicationModel.findOne({
         jobId,
-        employerUserId: loginEmployerUserId,
-        candidateUserId
+        employerUserId,
+        candidateUserId: loginCandidateUserId
     });
 
     if (!application) {
@@ -40,7 +38,7 @@ const PostCandidateReviewService = async (loginEmployerUserId: string, payload: 
 
     //check status
     if(application.status !== "accepted"){
-        throw new CustomError(400,  "You can only review a candidate whose application has been accepted.")
+        throw new CustomError(400,  "You can only review a employer whose application has been accepted.")
     }
 
     //check workStatus
@@ -49,13 +47,13 @@ const PostCandidateReviewService = async (loginEmployerUserId: string, payload: 
     }
 
     // //check already provided review
-    const review = await EmployerReviewModel.findOne({
+    const review = await CandidateReviewModel.findOne({
         jobId,
-        employerUserId: loginEmployerUserId,
-        candidateUserId
+        employerUserId,
+        candidateUserId: loginCandidateUserId
     })
     if(review){
-        throw new CustomError(409, "You have already submitted a review for this candidate on this job.");
+        throw new CustomError(409, "You have already submitted a review for this employer on this job.");
     }
 
 
@@ -66,17 +64,17 @@ const PostCandidateReviewService = async (loginEmployerUserId: string, payload: 
         session.startTransaction();
 
         //post review
-        await EmployerReviewModel.create([{
+        await CandidateReviewModel.create([{
             ...payload,
-            employerUserId: loginEmployerUserId
+            candidateUserId: loginCandidateUserId
         }], { session })
 
 
         //count average rating
-        const averageRatingResult = await EmployerReviewModel.aggregate([
+        const averageRatingResult = await CandidateReviewModel.aggregate([
             {
                 $match: {
-                    candidateUserId: new Types.ObjectId(candidateUserId)
+                    employerUserId: new Types.ObjectId(employerUserId)
                 }
             },
             {
@@ -93,12 +91,12 @@ const PostCandidateReviewService = async (loginEmployerUserId: string, payload: 
         const averageRating =
             averageRatingResult.length > 0
                 ? Number((averageRatingResult[0].averageRating).toFixed(1))
-                : candidate.ratings;
+                : employer.ratings;
 
 
-        //update candidate rating
-        await CandidateModel.updateOne(
-            { userId: candidateUserId },
+        //update employer rating
+        await EmployerModel.updateOne(
+            { userId: employerUserId },
             { 
                 ratings: averageRating, 
                 $inc: { totalReviews: 1 }

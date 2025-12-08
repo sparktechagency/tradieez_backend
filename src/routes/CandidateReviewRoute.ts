@@ -1,17 +1,17 @@
 import express from 'express';
 import AuthMiddleware from '../middlewares/AuthMiddleware';
-import EmployerReviewController from '../controllers/EmployerReviewController';
 import { UserRole } from '../constant/user.constant';
 import validationMiddleware from '../middlewares/validationMiddleware';
-import { employerReviewSchema } from '../validation/review.validation';
+import { candidateReviewSchema } from '../validation/review.validation';
+import CandidateReviewController from '../controllers/CandidateReviewController';
 
 const router = express.Router();
 
 router.post(
     '/post-review',
-    AuthMiddleware(UserRole.employer),
-    validationMiddleware(employerReviewSchema),
-    EmployerReviewController.postReview
+    AuthMiddleware(UserRole.candidate),
+    validationMiddleware(candidateReviewSchema),
+    CandidateReviewController.postReview
 );
 // router.delete(
 //     '/delete-review/:reviewId',

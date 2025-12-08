@@ -1,5 +1,6 @@
 import asyncHandler from "../utils/asyncHandler";
 import PostEmployerReviewService from "../services/employerReview/PostEmployerReviewService";
+import GetMyReviewsService from "../services/employerReview/GetMyReviewsService";
 
 
 const postReview = asyncHandler(async (req, res) => {
@@ -12,9 +13,20 @@ const postReview = asyncHandler(async (req, res) => {
     })
 })
 
+const getMyReviews = asyncHandler(async (req, res) => {
+    const { userId: candidateUserId } = req.headers;
+    const result = await GetMyReviewsService(candidateUserId as string);
+    res.status(200).json({
+        success: true,
+        message: "Reviews are retrieved successfully",
+        data: result
+    })
+})
+
 
 const EmployerReviewController = {
-    postReview
+    postReview,
+    getMyReviews
 }
 
 export default EmployerReviewController;

@@ -50,6 +50,8 @@ const GetEmployersService = async (query: TEmployerQuery) => {
             email:1,
             phone:1,
             profileImg:1,
+            ratings:1,
+            totalReviews:1,
             status: "$user.status",
             createdAt: "$createdAt"
         }

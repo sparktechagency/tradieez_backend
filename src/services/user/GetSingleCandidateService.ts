@@ -50,24 +50,6 @@ const GetSingleCandidateService = async (userId: string) => {
             $unwind: "$subcategory"
         },
         {
-            $lookup: {
-                from: "reviews",
-                let: { uid: "$userId" },   //$$uid // <-- variable created here
-                pipeline: [
-                    { $match: { $expr: { $eq: ["$userId", "$$uid"] } } },
-                    { $count: "count" },
-                ],
-                as: "reviewCount"
-            }
-        },
-        {
-            $addFields: {
-                totalReview: {
-                    $ifNull: [{ $arrayElemAt: ["$reviewCount.count", 0] }, 0]
-                }
-            }
-        },
-        {
             $project: {
                 _id: 0,
                 userId: 1,
@@ -86,7 +68,7 @@ const GetSingleCandidateService = async (userId: string) => {
                 address: "$address",
                 coordinates: "$location.coordinates",
                 ratings: "$ratings",
-                totalReview: "$totalReview",
+                totalReview: "$totalReviews",
             }
         },
     ])

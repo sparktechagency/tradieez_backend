@@ -45,17 +45,6 @@ const GetFindCandidatesService = async (loginEmployerUserId: string, query: TEmp
     },
     {
       $lookup: {
-        from: "reviews",
-        let: { uid: "$userId" },   //$$uid // <-- variable created here
-        pipeline: [
-          { $match: { $expr: { $eq: ["$userId", "$$uid"] } } },
-          { $count: "count" },
-        ],
-        as: "reviewCount"
-      }
-    },
-    {
-      $lookup: {
         from: "favoritecandidates",
         let: { candidateUserId: "$userId" }, 
         pipeline: [
@@ -75,9 +64,6 @@ const GetFindCandidatesService = async (loginEmployerUserId: string, query: TEmp
     },
     {
       $addFields: {
-        totalReview: {
-          $ifNull: [{ $arrayElemAt: ["$reviewCount.count", 0] }, 0]
-        },
         isFavorite: {
           $cond: [{ $gt: [{ $size: "$favorites" }, 0] }, true, false],
         }
@@ -96,7 +82,7 @@ const GetFindCandidatesService = async (loginEmployerUserId: string, query: TEmp
             experience:1,
             isPrivate: 1,
             ratings: '$ratings',
-            totalReview: '$totalReview',
+            totalReview: '$totalReviews',
             isFavorite: "$isFavorite",
             status: "$user.status",
             createdAt: "$createdAt"
