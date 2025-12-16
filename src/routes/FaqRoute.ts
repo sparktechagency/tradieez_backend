@@ -12,16 +12,15 @@ router.post(
   validationMiddleware(createFaqValidationSchema),
   FaqController.createFaq,
 );
-// router.get(
-//   '/get-user-faqs',
-//   FaqController.getUserFaqs
-// );
-// router.get(
-//   '/get-faqs',
-//   AuthMiddleware("super_admin", "admin"),
-//   FaqController.getFaqs
-// );
-
+router.get(
+  '/get-faqs',
+  AuthMiddleware("superAdmin", "admin"),
+  FaqController.getFaqs
+);
+router.get(
+  '/get-user-faqs',
+  FaqController.getUserFaqs
+);
 // router.patch(
 //   '/update-faq/:faqId',
 //   AuthMiddleware("super_admin", "admin"),
