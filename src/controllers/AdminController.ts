@@ -1,12 +1,47 @@
+import { ADMIN_VALID_FIELDS } from "../constant/admin.constant";
+import CreateAdminService from "../services/admin/CreateAdminService";
+import GetAdminsService from "../services/admin/GetAdminsService";
+import UpdateAdminService from "../services/admin/UpdateAdminService";
 import asyncHandler from "../utils/asyncHandler";
+import pickValidFields from "../utils/pickValidFields";
 
 
 
 const createAdmin = asyncHandler(async (req, res) => {
-    const result = await CreateBlogService(req, req.body);
-    res.status(200).json({
+    const result = await CreateAdminService(req.body);
+    res.status(201).json({
         success: true,
-        message: "Blog is published successfully",
+        message: "Admin is created successfully",
         data: result
     })
 })
+
+const getAdmins = asyncHandler(async (req, res) => {
+    const validatedQuery = pickValidFields(req.query, ADMIN_VALID_FIELDS);
+    const result = await GetAdminsService(validatedQuery);
+    res.status(201).json({
+        success: true,
+        message: "Admins are retrieved successfully",
+        meta: result.meta,
+        data: result.data
+    })
+})
+
+const updateAdmin = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const result = await UpdateAdminService(userId as string, req.body);
+    res.status(201).json({
+        success: true,
+        message: "Admin is updated successfully",
+        data: result
+    })
+})
+
+
+
+const AdminController = {
+    createAdmin,
+    getAdmins,
+    updateAdmin
+}
+export default AdminController;

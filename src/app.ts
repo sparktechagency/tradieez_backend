@@ -21,6 +21,7 @@ import ApplicationRoute from "./routes/ApplicationRoute";
 import EmployerReviewRoute from "./routes/EmployerReviewRoute";
 import CandidateReviewRoute from "./routes/CandidateReviewRoute";
 import FaqRoute from "./routes/FaqRoute";
+import AdminRoute from "./routes/AdminRoute";
 
 
 const app: Application = express();
@@ -80,6 +81,7 @@ app.use('/api/v1/application', ApplicationRoute);
 app.use('/api/v1/employer-review', EmployerReviewRoute);
 app.use('/api/v1/candidate-review', CandidateReviewRoute);
 app.use('/api/v1/faq', FaqRoute);
+app.use('/api/v1/admin', AdminRoute);
 
 //serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "../uploads",)))
