@@ -51,7 +51,7 @@ const deleteAdmin = asyncHandler(async (req, res) => {
 
 const updateAdminProfile = asyncHandler(async (req, res) => {
     const adminUserId = req.headers.userId;
-    const result = await UpdateAdminProfileService(adminUserId as string, req.body);
+    const result = await UpdateAdminProfileService(req, adminUserId as string, req.body);
     res.status(200).json({
         success: true,
         message: "Admin Profile is updated successfully",

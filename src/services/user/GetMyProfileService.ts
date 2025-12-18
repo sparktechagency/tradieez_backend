@@ -3,6 +3,8 @@ import { TUserRole } from "../../interfaces/user.interface";
 import CandidateModel from "../../models/CandidateModel";
 import EmployerModel from "../../models/EmployerModel";
 import UserModel from "../../models/UserModel";
+import AdminModel from "../../models/AdminModel";
+import CustomError from "../../errors/CustomError";
 
 
 const GetMyProfileService = async (userId: string, role: TUserRole) => {
@@ -93,16 +95,23 @@ const GetMyProfileService = async (userId: string, role: TUserRole) => {
         return result[0];
     }
 
-    if(role === "superAdmin"){
-        const result = await UserModel.findOne({ _id:userId, role: "superAdmin"});
-        return {
-            fullName: "Super Admin",
-            email: result?.email,
-            profileImg: ""
+    if(role === "admin"){
+        const result = await AdminModel.findOne({ userId}).select("-_id");
+        if(!result){
+            throw new CustomError(404, "Profile Not Found");
         }
+
+        return result
     }
 
-    return null;
+    //role is superadmin
+    const result = await UserModel.findOne({ _id: userId, role: "superAdmin" });
+    return {
+        fullName: "Super Admin",
+        email: result?.email,
+        profileImg: ""
+    }
+    
 }
 
 export default GetMyProfileService;

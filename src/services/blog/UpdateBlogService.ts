@@ -26,7 +26,7 @@ const UpdateBlogService = async (req:any, blogId: string, payload: Partial<IBlog
 
     //if image is available
     if (req.file) {
-        payload.image = await uploadToCloudinary(req?.file?.path as string);
+        payload.image = await uploadToCloudinary(req?.file?.path as string, 'blog');
     }
 
     const result = await BlogModel.updateOne(

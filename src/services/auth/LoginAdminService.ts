@@ -41,8 +41,8 @@ const LoginAdminService = async (payload: ILogin) => {
   let refreshToken: string;
 
   if(user.role === "superAdmin"){
-    accessToken = createToken({ userId: String(user._id), email: user.email, fullName:"Super Admin", role: user.role }, config.jwt_access_secret as Secret, config.jwt_access_expires_in as TExpiresIn);
-    refreshToken = createToken({ userId: String(user._id), email: user.email, fullName:"Super Admin", role: user.role }, config.jwt_refresh_secret as Secret, config.jwt_refresh_expires_in as TExpiresIn);
+    accessToken = createToken({ userId: String(user._id), email: user.email, fullName:"Super Admin", profileImg:"", role: user.role }, config.jwt_access_secret as Secret, config.jwt_access_expires_in as TExpiresIn);
+    refreshToken = createToken({ userId: String(user._id), email: user.email, fullName:"Super Admin", profileImg:"", role: user.role }, config.jwt_refresh_secret as Secret, config.jwt_refresh_expires_in as TExpiresIn);
   }
   else{
     const admin = await AdminModel.findOne({ userId: user._id });

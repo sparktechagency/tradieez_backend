@@ -29,7 +29,7 @@ const UpdateCandidateProfileService = async (loginUserId: string, req:any, paylo
 
     //if image is available
     if (req.file) {
-        payload.profileImg = await uploadToCloudinary(req?.file?.path as string);
+        payload.profileImg = await uploadToCloudinary(req?.file?.path as string, "candidate");
     }
 
     //update the candidate

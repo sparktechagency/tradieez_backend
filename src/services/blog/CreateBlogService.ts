@@ -20,7 +20,7 @@ const CreateBlogService = async ( req: any, payload: IBlog) => {
     }
 
     //upload image
-    const image = await uploadToCloudinary(req?.file?.path as string);
+    const image = await uploadToCloudinary(req?.file?.path as string, "blog");
 
     const result = await BlogModel.create({
         ...payload,

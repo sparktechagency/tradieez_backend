@@ -4,6 +4,7 @@ import { UserRole } from '../constant/user.constant';
 import AdminController from '../controllers/AdminController';
 import validationMiddleware from '../middlewares/validationMiddleware';
 import { createAdminSchema, updateAdminSchema } from '../validation/admin.validation';
+import upload from '../helper/upload';
 
 const router = express.Router();
 
@@ -29,10 +30,11 @@ router.delete(
   AdminController.deleteAdmin
 );
 router.patch(
-  "/update-admin-profile/:userId",
+  "/update-admin-profile",
   AuthMiddleware(UserRole.admin),
-  //validationMiddleware(updateAdminSchema),
-  AdminController.updateAdmin
+  upload.single("image"),
+  validationMiddleware(updateAdminSchema),
+  AdminController.updateAdminProfile
 );
 
 const AdminRoute = router;

@@ -26,7 +26,7 @@ const CreateCategoryService = async ( req: any, payload: ICategory) => {
     }
 
     //upload image
-    const image = await uploadToCloudinary(req?.file?.path as string);
+    const image = await uploadToCloudinary(req?.file?.path as string, 'category');
 
 
     const result = await CategoryModel.create({
