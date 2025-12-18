@@ -23,6 +23,17 @@ router.patch(
   validationMiddleware(updateAdminSchema),
   AdminController.updateAdmin
 );
+router.delete(
+  "/delete-admin/:userId",
+  AuthMiddleware(UserRole.superAdmin),
+  AdminController.deleteAdmin
+);
+router.patch(
+  "/update-admin-profile/:userId",
+  AuthMiddleware(UserRole.admin),
+  //validationMiddleware(updateAdminSchema),
+  AdminController.updateAdmin
+);
 
 const AdminRoute = router;
 export default AdminRoute;

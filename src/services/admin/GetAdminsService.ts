@@ -1,3 +1,4 @@
+import config from "../../config";
 import { ADMIN_SEARCHABLE_Fields } from "../../constant/admin.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
 import { TAdminQuery } from "../../interfaces/admin.interface";
@@ -59,7 +60,7 @@ const GetAdminsService = async (query: TAdminQuery) => {
         {
             $match: {
                 ...searchQuery,
-                ...filterQuery
+                ...filterQuery,
             },
         },
         { $sort: { [sortBy]: sortDirection } },
