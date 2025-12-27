@@ -70,7 +70,7 @@ export const createJobValidationSchema = z.object({
             if (inputDate < today) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
-                    message: "startDate must be today or a future date",
+                    message: "Start Date must be today or a future date",
                 });
             }
         }),
@@ -102,7 +102,7 @@ export const createJobValidationSchema = z.object({
             if (inputDate < today) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
-                    message: "startDate must be today or a future date",
+                    message: "End Date must be today or a future date",
                 });
             }
         }).optional(),
