@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
 import { ISubscription } from "../interfaces/subscription.interface";
 import { DURATION_VALUES, VALIDITY_VALUES } from "../constant/subscription.constant";
+import { VISIBLITY_VALUES } from "../constant/global.constant";
 
 const subscriptionSchema = new Schema<ISubscription>({
     name: {
@@ -11,6 +12,11 @@ const subscriptionSchema = new Schema<ISubscription>({
         type: Number,
         enum: DURATION_VALUES,
         required: true,
+    },
+    slug: {
+        type: String,
+        required: true,
+        trim: true,
     },
     validity: {
         type: String,
@@ -25,11 +31,15 @@ const subscriptionSchema = new Schema<ISubscription>({
         type: [String],
         required: true
     },
-    notice: {
+    description: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        enum: VISIBLITY_VALUES,
+        default: 'visible'
     }
-
 }, { timestamps: true, versionKey:false });
 
 

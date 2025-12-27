@@ -25,10 +25,10 @@ export const updateApplicationSchema = z.object({
         .optional(),   
     workStatus: z
         .string({
-            invalid_type_error: "status must be a valid string value.",
+            invalid_type_error: "workStatus must be a valid string value.",
         })
         .refine((val) => WORK_STATUS_VALUES.includes(val as TWorkStatus), {
-            message: `status must be one of: ${WORK_STATUS_VALUES.map((cv)=>`'${cv}'`).join(",")}`,
+            message: `workStatus must be one of: ${WORK_STATUS_VALUES.map((cv)=>`'${cv}'`).join(",")}`,
         })
         .optional()   
 })

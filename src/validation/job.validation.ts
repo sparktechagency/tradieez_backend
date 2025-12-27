@@ -1,5 +1,7 @@
 import z from "zod";
 import isNotObjectId from "../utils/isNotObjectId";
+import { JOB_EXPERIENCE_VALUES, JOB_RATE_VALUES, JOB_TYPE_VALUES } from "../constant/job.constant";
+import { TJobExperience, TJobRateType, TJobType } from "../interfaces/job.interface";
 
 
 export const createJobValidationSchema = z.object({
@@ -23,24 +25,24 @@ export const createJobValidationSchema = z.object({
             invalid_type_error: "jobType must be a valid string value.",
             required_error: "jobType value is required"
         })
-        .refine((val) => ['full_time', 'part_time', 'freelance', 'contact'].includes(val), {
-            message: "jobType must be one of: 'full_time', 'part_time', 'freelance', 'contact'",
+        .refine((val) => JOB_TYPE_VALUES.includes(val as TJobType), {
+            message: `jobType must be one of: ${JOB_TYPE_VALUES.map((cv) => `'${cv}'`).join(",")}`,
         }),
     experience: z
         .string({
             invalid_type_error: "experience must be a valid string value.",
             required_error: "experience value is required"
         })
-        .refine((val) => ['apprentice', 'newly_qualified', '1_3_years', '3_5_years', '5_years_plus', 'n/a'].includes(val), {
-            message: "experience must be one of: 'apprentice', 'newly_qualified', '1_3_years', '3_5_years', '5_years_plus', 'n/a'",
+        .refine((val) => JOB_EXPERIENCE_VALUES.includes(val as TJobExperience), {
+            message: `experience must be one of: ${JOB_EXPERIENCE_VALUES.map((cv) => `'${cv}'`).join(",")}`,
         }),
     rateType: z
         .string({
             invalid_type_error: "rateType must be a valid string value.",
             required_error: "rateType value is required"
         })
-        .refine((val) => ['hourly', 'daily', 'weekly', 'monthly', 'annual'].includes(val), {
-            message: "rateType must be one of: 'hourly', 'daily', 'weekly', 'monthly', 'annual'",
+        .refine((val) => JOB_RATE_VALUES.includes(val as TJobRateType), {
+            message: `rateType must be one of: ${JOB_RATE_VALUES.map((cv) => `'${cv}'`).join(",")}`,
         }),
     startDate: z
         .string({

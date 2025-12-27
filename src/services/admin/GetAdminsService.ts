@@ -1,5 +1,4 @@
-import config from "../../config";
-import { ADMIN_SEARCHABLE_Fields } from "../../constant/admin.constant";
+import { ADMIN_SEARCHABLE_FIELDS } from "../../constant/admin.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
 import { TAdminQuery } from "../../interfaces/admin.interface";
 import AdminModel from "../../models/AdminModel";
@@ -24,7 +23,7 @@ const GetAdminsService = async (query: TAdminQuery) => {
   //4. setup searching
   let searchQuery = {};
   if (searchTerm) {
-    searchQuery = makeSearchQuery(searchTerm, ADMIN_SEARCHABLE_Fields);
+    searchQuery = makeSearchQuery(searchTerm, ADMIN_SEARCHABLE_FIELDS);
   }
 
   //5 setup filters

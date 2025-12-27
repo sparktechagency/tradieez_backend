@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
 import { TJobQuery } from "../../interfaces/job.interface";
 import JobModel from "../../models/Job.Model";
-import { JobSearchableFields } from "../../constant/job.constant";
+import { JOB_SEARCHABLE_FIELDS } from "../../constant/job.constant";
 
 const GetMyJobsService = async (loginUserId: string, query: TJobQuery) => {
     const {
@@ -25,7 +25,7 @@ const GetMyJobsService = async (loginUserId: string, query: TJobQuery) => {
     //3. setup searching
     let searchQuery = {};
     if (searchTerm) {
-        searchQuery = makeSearchQuery(searchTerm, JobSearchableFields);
+        searchQuery = makeSearchQuery(searchTerm, JOB_SEARCHABLE_FIELDS);
     }
 
     //4. setup filters

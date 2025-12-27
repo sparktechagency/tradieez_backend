@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IJob } from "../interfaces/job.interface";
+import { JOB_EXPERIENCE_VALUES, JOB_RATE_VALUES, JOB_TYPE_VALUES } from "../constant/job.constant";
 
 
 const jobSchema = new Schema<IJob>({
@@ -22,17 +23,17 @@ const jobSchema = new Schema<IJob>({
     jobType: {
         type: String,
         required: true,
-        enum: ['full_time', 'part_time', 'freelance', 'contact'],
+        enum: JOB_TYPE_VALUES,
     },
     experience: {
         type: String,
         required: true,
-        enum: ['apprentice', 'newly_qualified', '1_3_years', '3_5_years', '5_years_plus', 'n/a'],
+        enum: JOB_EXPERIENCE_VALUES,
     },
     rateType: {
         type: String,
         required: true,
-        enum: ['hourly', 'daily', 'weekly', 'monthly', 'annual'],
+        enum: JOB_RATE_VALUES,
     },
     startDate: {
         type: Date,
