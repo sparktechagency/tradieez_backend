@@ -1,33 +1,76 @@
 import CustomError from "../../errors/CustomError";
-import { IBlogCategory } from "../../interfaces/blogCategory.interface";
-import BlogCategoryModel from "../../models/BlogCategoryModel";
+import { ISubscription } from "../../interfaces/subscription.interface";
+import SubscriptionModel from "../../models/SubscriptionModel";
 import convertToSlug from "../../utils/convertToSlug";
 import isNotObjectId from "../../utils/isNotObjectId";
 
-const UpdateBlogCategoryService = async (categoryId: string, payload: Partial<IBlogCategory>) => {
-    if (isNotObjectId(categoryId)) {
-        throw new CustomError(400, "categoryId must be a valid ObjectId")
+const UpdateSubscriptionService = async (subscriptionId: string, payload: Partial<ISubscription>) => {
+    const { name, validity } = payload;
+    if (isNotObjectId(subscriptionId)) {
+        throw new CustomError(400, "subscriptionId must be a valid ObjectId")
     }
 
-    const category = await BlogCategoryModel.findById(categoryId);
-    if (!category) {
-        throw new CustomError(404, 'This categoryId not found');
+    const subscription = await SubscriptionModel.findById(subscriptionId);
+    if (!subscription) {
+        throw new CustomError(404, 'Subscription not found with the provided ID');
     }
 
-    if (payload.name) {
-        const slug = convertToSlug(payload.name);
+
+    //if name is available but validity is not available
+    if (name && !validity) {
+        const slug = convertToSlug(name);
         payload.slug = slug;
-        const categoryExist = await BlogCategoryModel.findOne({
-            _id: { $ne: categoryId },
-            slug
+        const subscriptionExist = await SubscriptionModel.findOne({
+            _id: { $ne: subscriptionId },
+            slug,
+            validity: subscription.validity
         });
-        if (categoryExist) {
-            throw new CustomError(409, 'Sorry, This category already exists.');
+        if (subscriptionExist) {
+            throw new CustomError(409, 'Sorry, This subscription already exists.');
         }
     }
 
-    const result = await BlogCategoryModel.updateOne(
-        { _id: categoryId },
+     //if name is unavailable but validity is available
+    if (!name && validity) {
+        const subscriptionExist = await SubscriptionModel.findOne({
+            _id: { $ne: subscriptionId },
+            slug: subscription.slug,
+            validity
+        });
+        if (subscriptionExist) {
+            throw new CustomError(409, 'Sorry, This subscription already exists.');
+        }
+        if (validity === 'monthly') {
+            payload.duration = 30;
+        }
+        if (validity === 'yearly') {
+            payload.duration = 365;
+        }
+    }
+
+
+    //if name & validity are available
+    if (name && validity) {
+        const slug = convertToSlug(name);
+        payload.slug = slug;
+        const subscriptionExist = await SubscriptionModel.findOne({
+            _id: { $ne: subscriptionId },
+            slug,
+            validity
+        });
+        if (subscriptionExist) {
+            throw new CustomError(409, 'Sorry, This subscription already exists.');
+        }
+        if (validity === 'monthly') {
+            payload.duration = 30;
+        }
+        if (validity === 'yearly') {
+            payload.duration = 365;
+        }
+    }
+
+    const result = await SubscriptionModel.updateOne(
+        { _id: subscriptionId },
         payload,
         { runValidators: true}
     )
@@ -35,4 +78,4 @@ const UpdateBlogCategoryService = async (categoryId: string, payload: Partial<IB
     return result;
 }
 
-export default UpdateBlogCategoryService;
+export default UpdateSubscriptionService;

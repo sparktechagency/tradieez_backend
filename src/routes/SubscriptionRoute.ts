@@ -3,7 +3,7 @@ import AuthMiddleware from '../middlewares/AuthMiddleware';
 import { UserRole } from '../constant/user.constant';
 import SubscriptionController from '../controllers/SubscriptionController';
 import validationMiddleware from '../middlewares/validationMiddleware';
-import { createSubscriptionSchema } from '../validation/subscription.validation';
+import { createSubscriptionSchema, updateSubscriptionSchema } from '../validation/subscription.validation';
 const router = express.Router();
 
 router.post(
@@ -22,6 +22,16 @@ router.get(
   AuthMiddleware(UserRole.employer),
   SubscriptionController.getUserSubscriptions
 );
-
+router.patch(
+  "/update-subscription/:subscriptionId",
+  AuthMiddleware(UserRole.superAdmin, UserRole.admin),
+  validationMiddleware(updateSubscriptionSchema),
+  SubscriptionController.updateSubscription
+);
+router.delete(
+  "/delete-subscription/:subscriptionId",
+  AuthMiddleware(UserRole.superAdmin, UserRole.admin),
+  SubscriptionController.deleteSubscription
+);
 const SubscriptionRoute = router;
 export default SubscriptionRoute;
