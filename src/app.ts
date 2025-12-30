@@ -23,7 +23,7 @@ import CandidateReviewRoute from "./routes/CandidateReviewRoute";
 import FaqRoute from "./routes/FaqRoute";
 import AdminRoute from "./routes/AdminRoute";
 import PlanRoute from "./routes/PlanRoute";
-import PaymentRoute from "./routes/PaymentRoute";
+import PaymentRoute from "./routes/SubscriptionRoute";
 
 
 const app: Application = express();

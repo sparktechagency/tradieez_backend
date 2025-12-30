@@ -1,14 +1,14 @@
 import { model, Schema } from "mongoose";
-import { IPayment } from "../interfaces/payment.interface";
+import { ISubscription } from "../interfaces/subscription.interface";
 import { PAYMENT_STATUS_VALUES } from "../constant/payment.constant";
 
 
-const paymentSchema = new Schema<IPayment>({
-    subscriptionId: {
+const subscriptionSchema = new Schema<ISubscription>({
+    planId: {
         type: Schema.Types.ObjectId,
-        required: [true, "subscriptionId is required"],
+        required: [true, "planId is required"],
         trim: true,
-        ref: "Subscription"
+        ref: "Plan"
     },
     userId: {
         type: Schema.Types.ObjectId,
@@ -42,5 +42,5 @@ const paymentSchema = new Schema<IPayment>({
 
 
 
-const PaymentModel = model<IPayment>("Payment", paymentSchema);
-export default PaymentModel;
+const SubscriptionModel = model<ISubscription>("Subscription", subscriptionSchema);
+export default SubscriptionModel;
