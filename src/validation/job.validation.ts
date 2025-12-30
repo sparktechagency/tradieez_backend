@@ -257,7 +257,7 @@ export const createJobValidationSchema = z.object({
             if (minRange >= maxRange) {
                 ctx.addIssue({
                     path: ["minRange"],
-                    message: "Minimum range must be less than minimum range",
+                    message: "Minimum range must be less than maximum range",
                     code: z.ZodIssueCode.custom,
                 });
 

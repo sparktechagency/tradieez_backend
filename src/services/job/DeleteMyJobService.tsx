@@ -4,6 +4,7 @@ import CustomError from "../../errors/CustomError";
 import JobModel from "../../models/Job.Model";
 import isNotObjectId from "../../utils/isNotObjectId";
 import FavoriteJobModel from "../../models/FavoriteJobModel";
+import ApplicationModel from "../../models/ApplicationModel";
 
 const DeleteMyJobService = async (loginUserId: string, jobId: string) => {
     if (isNotObjectId(jobId)) {
@@ -15,12 +16,12 @@ const DeleteMyJobService = async (loginUserId: string, jobId: string) => {
     }
 
     //check if jobId is associated with applied job
-    // const associatedWithAppliedJob = await SubCategoryModel.findOne({
-    //      jobId
-    // });
-    // if(associatedWithAppliedJob){
-    //     throw new CustomError(409, 'Unable to delete, This category is associated with sub-category.');
-    // }
+    const associatedWithAppliedJob = await ApplicationModel.findOne({
+         jobId
+    });
+    if(associatedWithAppliedJob){
+        throw new CustomError(409, 'Unable to delete, This job is associated with one or more applications');
+    }
 
    //transaction & rollback
     const session = await mongoose.startSession();
