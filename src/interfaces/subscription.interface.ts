@@ -13,3 +13,13 @@ export interface ISubscription extends Document {
     startDate: Date;
     endDate: Date;
 }
+
+
+export type TSubscriptionQuery = {
+    searchTerm?: string;
+    page?: string;
+    limit?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+    status?: 'active' | 'expired',
+};

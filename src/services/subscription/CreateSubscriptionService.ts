@@ -1,6 +1,4 @@
-import { Types } from "mongoose";
 import CustomError from "../../errors/CustomError";
-import compareDate from "../../utils/compareDate";
 import { ISubscription } from "../../interfaces/subscription.interface";
 import SubscriptionModel from "../../models/SubscriptionModel";
 import PlanModel from "../../models/PlanModel";
@@ -10,14 +8,13 @@ const CreateSubscriptionService = async (employerUserId: string, payload: ISubsc
     //check planId
     const plan = await PlanModel.findById(payload.planId);
     if (!plan) {
-        throw new CustomError(404, 'Subscription not found with the provided ID');
+        throw new CustomError(404, 'Subscription plan not found with the provided ID');
     }
 
     //check status
     if (plan.status === "hidden") {
         throw new CustomError(400, 'This plan is hidden');
     }
-
 
     //Calculate the date of after 30 days
     const currentDate = new Date();
@@ -27,27 +24,29 @@ const CreateSubscriptionService = async (employerUserId: string, payload: ISubsc
         targetDate.setDate(currentDate.getDate() + Number(30));
     }
     if (plan.duration === 365) {
-        targetDate.setDate(currentDate.getDate() + Number(30));
+        targetDate.setDate(currentDate.getDate() + Number(365));
     }
 
 
     const startDate = currentDate.toISOString()?.split("T")[0];
     const endDate = targetDate.toISOString()?.split("T")[0] + "T23:59:59.999+00:00";
+
+    console.log(payload.planId);
     const result = await SubscriptionModel.create({
-        planIdId: payload.planId,
+        planId: payload.planId,
         startDate,
         endDate,
         amount: plan.price,
         userId: employerUserId
     })
 
-    const subscriptions = await SubscriptionModel.aggregate([
-        {
-            $match: {
-                userId: new Types.ObjectId(employerUserId)
-            }
-        }
-    ])
+    // const subscriptions = await SubscriptionModel.aggregate([
+    //     {
+    //         $match: {
+    //             userId: new Types.ObjectId(employerUserId)
+    //         }
+    //     }
+    // ])
     //console.log(subscrptions);
     // console.log(currentDate);
     // const inputDate = new Date("2025-12-30");
@@ -64,6 +63,7 @@ const CreateSubscriptionService = async (employerUserId: string, payload: ISubsc
     // })) : [];
 
     // return modifiedResult;
+    return result;
 }
 
 export default CreateSubscriptionService;

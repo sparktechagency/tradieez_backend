@@ -2,12 +2,12 @@ import z from "zod";
 import isNotObjectId from "../utils/isNotObjectId";
 
 export const createSubscriptionSchema = z.object({
-    planIdId: z
+    planId: z
         .string({
-            invalid_type_error: "planIdId must be a string",
-            required_error: "planIdId is required!",
+            invalid_type_error: "planId must be a string",
+            required_error: "planId is required!",
         })
         .refine((id) => !isNotObjectId(id), {
-            message: "planIdId must be a valid ObjectId",
+            message: "planId must be a valid ObjectId",
         })
 });
