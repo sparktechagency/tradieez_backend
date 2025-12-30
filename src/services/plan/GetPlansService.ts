@@ -1,9 +1,9 @@
-import { SUBSCRIPTION_SEARCHABLE_FIELDS } from "../../constant/subscription.constant";
+import { PLAN_SEARCHABLE_FIELDS } from "../../constant/plan.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
-import { TSubscriptionQuery } from "../../interfaces/subscription.interface";
-import SubscriptionModel from "../../models/SubscriptionModel";
+import { TPlanQuery } from "../../interfaces/plan.interface";
+import PlanModel from "../../models/PlanModel";
 
-const GetSubscriptionsService = async (query: TSubscriptionQuery) => {
+const GetPlansService = async (query: TPlanQuery) => {
     const {
         searchTerm,
         page = 1,
@@ -22,7 +22,7 @@ const GetSubscriptionsService = async (query: TSubscriptionQuery) => {
     //4. setup searching
     let searchQuery = {};
     if (searchTerm) {
-        searchQuery = makeSearchQuery(searchTerm, SUBSCRIPTION_SEARCHABLE_FIELDS);
+        searchQuery = makeSearchQuery(searchTerm, PLAN_SEARCHABLE_FIELDS);
     }
 
     //5. setup filters
@@ -32,7 +32,7 @@ const GetSubscriptionsService = async (query: TSubscriptionQuery) => {
     }
 
 
-    const result = await SubscriptionModel.aggregate([
+    const result = await PlanModel.aggregate([
         {
             $match: {
                 ...searchQuery,
@@ -56,7 +56,7 @@ const GetSubscriptionsService = async (query: TSubscriptionQuery) => {
     ]).collation({ locale: "en", strength: 2 });
 
     // total count
-    const totalCountResult = await SubscriptionModel.aggregate([
+    const totalCountResult = await PlanModel.aggregate([
         {
             $match: {
                 ...searchQuery,
@@ -80,4 +80,4 @@ const GetSubscriptionsService = async (query: TSubscriptionQuery) => {
     };
 };
 
-export default GetSubscriptionsService;
+export default GetPlansService;

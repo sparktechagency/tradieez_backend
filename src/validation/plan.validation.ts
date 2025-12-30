@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-escape */
 import z from "zod";
-import { VALIDITY_VALUES } from "../constant/subscription.constant";
-import { TValidity } from "../interfaces/subscription.interface";
+import { VALIDITY_VALUES } from "../constant/plan.constant";
+import { TValidity } from "../interfaces/plan.interface";
 import { VISIBLITY_VALUES } from "../constant/global.constant";
 import { TVisibility } from "../types/global.type";
 
 
-export const createSubscriptionSchema = z.object({
+export const createPlanSchema = z.object({
     name: z
         .string({
             invalid_type_error: "name must be string",
@@ -64,7 +64,7 @@ export const createSubscriptionSchema = z.object({
         .trim()
 });
 
-export const updateSubscriptionSchema = z.object({
+export const updatePlanSchema = z.object({
     name: z
         .string({
             invalid_type_error: "name must be string",

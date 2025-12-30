@@ -1,9 +1,9 @@
 import { model, Schema } from "mongoose";
-import { ISubscription } from "../interfaces/subscription.interface";
-import { DURATION_VALUES, VALIDITY_VALUES } from "../constant/subscription.constant";
 import { VISIBLITY_VALUES } from "../constant/global.constant";
+import { IPlan } from "../interfaces/plan.interface";
+import { DURATION_VALUES, VALIDITY_VALUES } from "../constant/plan.constant";
 
-const subscriptionSchema = new Schema<ISubscription>({
+const planSchema = new Schema<IPlan>({
     name: {
         type: String,
         required: true
@@ -43,5 +43,5 @@ const subscriptionSchema = new Schema<ISubscription>({
 }, { timestamps: true, versionKey:false });
 
 
-const SubscriptionModel = model<ISubscription>('Subscription', subscriptionSchema);
-export default SubscriptionModel;
+const PlanModel = model<IPlan>('Plan', planSchema);
+export default PlanModel;

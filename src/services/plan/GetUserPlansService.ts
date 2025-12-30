@@ -1,7 +1,7 @@
-import SubscriptionModel from "../../models/SubscriptionModel"
+import PlanModel from "../../models/PlanModel"
 
-const GetUserSubscriptionsService = async () => {
-    const result = await SubscriptionModel.aggregate([
+const GetUserPlansService = async () => {
+    const result = await PlanModel.aggregate([
         {
             $match: {
                 status: 'visible'
@@ -22,4 +22,4 @@ const GetUserSubscriptionsService = async () => {
     return result
 }
 
-export default GetUserSubscriptionsService
+export default GetUserPlansService

@@ -4,7 +4,7 @@ import { TVisibility } from "../types/global.type";
 export type TDuration = 30 | 365;
 export type TValidity = "yearly" | "monthly";
 
-export interface ISubscription extends Document{
+export interface IPlan extends Document{
     name: string;
     slug: string;
     duration: TDuration;
@@ -15,7 +15,7 @@ export interface ISubscription extends Document{
     status: TVisibility
 }
 
-export type TSubscriptionQuery = {
+export type TPlanQuery = {
     searchTerm?: string;
     page?: string;
     limit?: string;
