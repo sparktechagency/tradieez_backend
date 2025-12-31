@@ -31,7 +31,6 @@ const CreateSubscriptionService = async (employerUserId: string, payload: ISubsc
     const startDate = currentDate.toISOString()?.split("T")[0];
     const endDate = targetDate.toISOString()?.split("T")[0] + "T23:59:59.999+00:00";
 
-    console.log(payload.planId);
     const result = await SubscriptionModel.create({
         planId: payload.planId,
         startDate,

@@ -13,6 +13,12 @@ router.post(
   validationMiddleware(createSubscriptionSchema),
   SubscriptionController.createSubscription
 );
+router.get(
+  '/get-my-subscriptions',
+  AuthMiddleware(UserRole.employer),
+  SubscriptionController.getMySubscriptions,
+);
+
 
 const SubscriptionRoute = router;
 export default SubscriptionRoute;
