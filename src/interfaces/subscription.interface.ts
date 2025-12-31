@@ -21,6 +21,6 @@ export type TSubscriptionQuery = {
     limit?: string;
     sortBy?: string;
     sortOrder?: "asc" | "desc";
-    status?: 'active' | 'expired',
+    status?: 'pending' | 'active' | 'expired',
     paymentStatus?: TPaymentStatus;
 };

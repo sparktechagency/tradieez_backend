@@ -18,6 +18,11 @@ router.get(
   AuthMiddleware(UserRole.employer),
   SubscriptionController.getMySubscriptions,
 );
+router.get(
+  '/get-subscriptions',
+  AuthMiddleware(UserRole.admin, UserRole.superAdmin),
+  SubscriptionController.getSubscriptions,
+);
 
 
 const SubscriptionRoute = router;

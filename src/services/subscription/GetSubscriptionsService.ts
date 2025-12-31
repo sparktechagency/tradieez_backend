@@ -1,12 +1,11 @@
 
-import { Types } from "mongoose";
-import { PLAN_SEARCHABLE_FIELDS } from "../../constant/plan.constant";
+import { SUBSCRIPTION_SEARCHABLE_FIELDS } from "../../constant/subscription.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
 import { TSubscriptionQuery } from "../../interfaces/subscription.interface";
 import SubscriptionModel from "../../models/SubscriptionModel";
 import getSubscriptionStatus from "../../utils/getSubscriptionStatus";
 
-const GetMySubscriptionsService = async (employerUserId: string, query: TSubscriptionQuery) => {
+const GetSubscriptionsService = async (query: TSubscriptionQuery) => {
     const {
         searchTerm,
         page = 1,
@@ -26,7 +25,7 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
     //4. setup searching
     let searchQuery = {};
     if (searchTerm) {
-        searchQuery = makeSearchQuery(searchTerm, PLAN_SEARCHABLE_FIELDS);
+        searchQuery = makeSearchQuery(searchTerm, SUBSCRIPTION_SEARCHABLE_FIELDS);
     }
 
     //5. setup filters
@@ -35,10 +34,9 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
         filterQuery = makeFilterQuery(filters);
     }
 
-
     //if status is available
     if (status) {
-        const currentDateStr = new Date().toISOString().split("T")[0] + "T23:59:59.999+00:00";
+        const currentDateStr = new Date().toISOString().split("T")[0]+"T23:59:59.999+00:00";
         const currentDate = new Date(currentDateStr as string);
         if (status === "pending") {
             filterQuery = {
@@ -63,8 +61,18 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
     }
 
 
-
     const result = await SubscriptionModel.aggregate([
+        {
+            $lookup: {
+                from: "employers",
+                localField: "userId",
+                foreignField: "userId",
+                as: "employer"
+            }
+        },
+        {
+            $unwind: "$employer"
+        },
         {
             $lookup: {
                 from: "plans",
@@ -82,18 +90,20 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
                 amount: 1,
                 startDate:1,
                 endDate:1,
+                employerUserId: "$employerUserId",
+                employerName: "$employer.fullName",
+                employerEmail: "$employer.email",
+                employerPhone: "$employer.phone",
+                employerImg: "$employer.profileImg",
                 planName: "$plan.name",
                 duration: "$plan.duration",
                 validity: "$plan.validity",
-                features: "$plan.features",
-                description: "$plan.description",
                 paymentStatus: "$paymentStatus",
                 createdAt: "$createdAt"
             },
         },
         {
             $match: {
-                userId: new Types.ObjectId(employerUserId),
                 ...searchQuery,
                 ...filterQuery
             },
@@ -106,7 +116,18 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
 
     // total count
     const totalCountResult = await SubscriptionModel.aggregate([
-         {
+        {
+            $lookup: {
+                from: "employers",
+                localField: "userId",
+                foreignField: "userId",
+                as: "employer"
+            }
+        },
+        {
+            $unwind: "$employer"
+        },
+        {
             $lookup: {
                 from: "plans",
                 localField: "planId",
@@ -121,23 +142,25 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
             $project: {
                 _id: 1,
                 amount: 1,
-                startDate:1,
-                endDate:1,
+                startDate: 1,
+                endDate: 1,
+                employerUserId: "$employerUserId",
+                employerName: "$employer.fullName",
+                employerEmail: "$employer.email",
+                employerPhone: "$employer.phone",
+                employerImg: "$employer.profileImg",
                 planName: "$plan.name",
                 duration: "$plan.duration",
                 validity: "$plan.validity",
-                features: "$plan.features",
-                description: "$plan.description",
                 paymentStatus: "$paymentStatus",
                 createdAt: "$createdAt"
             },
         },
         {
             $match: {
-                userId: new Types.ObjectId(employerUserId),
                 ...searchQuery,
                 ...filterQuery
-            }
+            },
         },
         { $count: "totalCount" }
     ])
@@ -163,4 +186,4 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
     };
 };
 
-export default GetMySubscriptionsService;
+export default GetSubscriptionsService;
