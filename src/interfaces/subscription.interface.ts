@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Types } from "mongoose";
 
-export type TPaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+export type TPaymentStatus = 'unpaid' | 'paid' | 'failed' | 'refunded';
 
 export interface ISubscription extends Document {
     planId: Types.ObjectId;
@@ -22,4 +22,5 @@ export type TSubscriptionQuery = {
     sortBy?: string;
     sortOrder?: "asc" | "desc";
     status?: 'active' | 'expired',
+    paymentStatus?: TPaymentStatus;
 };

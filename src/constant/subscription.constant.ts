@@ -1,6 +1,6 @@
 import { TPaymentStatus } from "../interfaces/subscription.interface";
 
-export const PAYMENT_STATUS_VALUES : TPaymentStatus[] = ["pending", "paid", "failed", "refunded"];
+export const PAYMENT_STATUS_VALUES : TPaymentStatus[] = ["unpaid", "paid", "failed", "refunded"];
 
 export const SUBSCRIPTION_VALID_FIELDS: string[] = [
   "searchTerm",
@@ -8,6 +8,6 @@ export const SUBSCRIPTION_VALID_FIELDS: string[] = [
   "limit",
   "sortBy",
   "sortOrder",
-  "status",
-  "validity"
+  "paymentStatus",
+  "status"
 ];

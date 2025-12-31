@@ -25,7 +25,7 @@ const subscriptionSchema = new Schema<ISubscription>({
         type: String,
         required: true,
         enum: PAYMENT_STATUS_VALUES,
-        default: 'pending'
+        default: 'unpaid'
     },
     startDate: {
         type: Date,

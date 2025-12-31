@@ -17,8 +17,9 @@ const createSubscription = asyncHandler(async (req, res) => {
 
 
 const getMySubscriptions = asyncHandler(async (req, res) => {
+    const employerUserId = req.headers.userId;
     const validatedQuery = pickValidFields(req.query, SUBSCRIPTION_VALID_FIELDS);
-    const result = await GetMySubscriptionsService(validatedQuery);
+    const result = await GetMySubscriptionsService(employerUserId as string, validatedQuery);
     res.status(200).json({
         success: true,
         message: 'Subscriptions are retrieved successfully',

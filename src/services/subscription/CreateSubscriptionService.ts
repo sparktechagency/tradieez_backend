@@ -39,29 +39,6 @@ const CreateSubscriptionService = async (employerUserId: string, payload: ISubsc
         userId: employerUserId
     })
 
-    // const subscriptions = await SubscriptionModel.aggregate([
-    //     {
-    //         $match: {
-    //             userId: new Types.ObjectId(employerUserId)
-    //         }
-    //     }
-    // ])
-    //console.log(subscrptions);
-    // console.log(currentDate);
-    // const inputDate = new Date("2025-12-30");
-    // console.log({
-    //     inputDate
-    // });
-
-
-    // console.log(subscriptions);
-
-    // const modifiedResult = subscriptions.length > 0 ? subscriptions?.map((cv)=> ({
-    //     ...cv,
-    //     status: compareDate(cv.endDate)
-    // })) : [];
-
-    // return modifiedResult;
     return result;
 }
 
