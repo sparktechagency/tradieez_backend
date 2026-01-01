@@ -6,8 +6,11 @@ export type TPaymentStatus = 'unpaid' | 'paid' | 'failed' | 'refunded';
 export interface ISubscription extends Document {
     planId: Types.ObjectId;
     userId: Types.ObjectId;
-    amount: number;
     transactionId: string;
+    amount: number;
+    paymentId: string;
+    stripeFee: number;
+    netAmount: number;
     paymentStatus: TPaymentStatus;
     paymentDetails: any;
     startDate: Date;

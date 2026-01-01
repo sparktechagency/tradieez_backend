@@ -2,16 +2,27 @@ import { SUBSCRIPTION_VALID_FIELDS } from "../constant/subscription.constant";
 import CreateSubscriptionService from "../services/subscription/CreateSubscriptionService";
 import GetMySubscriptionsService from "../services/subscription/GetMySubscriptionsService";
 import GetSubscriptionsService from "../services/subscription/GetSubscriptionsService";
+import VerifySessionService from "../services/subscription/VerifySessionService";
 import asyncHandler from "../utils/asyncHandler";
 import pickValidFields from "../utils/pickValidFields";
 
 
 const createSubscription = asyncHandler(async (req, res) => {
-    const employerUserId = req.headers.userId;
-    const result = await CreateSubscriptionService(employerUserId as string, req.body);
+    const { email, userId } = req.headers;
+    const result = await CreateSubscriptionService(userId as string, email as string, req.body);
     res.status(200).json({
         success: true,
         message: "Subscription is initiated successfully",
+        data: result
+    })
+})
+
+const verifySession = asyncHandler(async (req, res) => {
+    const { sessionId } = req.query;
+    const result = await VerifySessionService(sessionId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Payment Successful',
         data: result
     })
 })
@@ -44,7 +55,8 @@ const getSubscriptions = asyncHandler(async (req, res) => {
 const SubscriptionController = {
     createSubscription,
     getMySubscriptions,
-    getSubscriptions
+    getSubscriptions,
+    verifySession
 }
 
 export default SubscriptionController;

@@ -16,10 +16,29 @@ const subscriptionSchema = new Schema<ISubscription>({
         trim: true,
         ref: "User"
     },
+    transactionId: {
+        type: String,
+        unique: true,
+        trim: true
+    },
     amount: {
         type: Number,
         required: true,
         trim: true,
+    },
+    paymentId: {
+        type: String,
+        // unique: true,
+        // sparse: true, // Important for optional unique fields
+        default: '',  // Set default to an empty string
+    },
+    stripeFee: {
+        type: Number,
+        default: 0
+    },
+    netAmount: {
+        type: Number,
+        default: 0
     },
     paymentStatus: {
         type: String,

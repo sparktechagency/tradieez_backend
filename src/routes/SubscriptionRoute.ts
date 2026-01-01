@@ -14,6 +14,10 @@ router.post(
   SubscriptionController.createSubscription
 );
 router.get(
+  '/verify-session',
+  SubscriptionController.verifySession,
+);
+router.get(
   '/get-my-subscriptions',
   AuthMiddleware(UserRole.employer),
   SubscriptionController.getMySubscriptions,

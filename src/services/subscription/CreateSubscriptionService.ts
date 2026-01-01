@@ -1,10 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomError from "../../errors/CustomError";
 import { ISubscription } from "../../interfaces/subscription.interface";
 import SubscriptionModel from "../../models/SubscriptionModel";
 import PlanModel from "../../models/PlanModel";
+import mongoose from "mongoose";
+import Stripe from 'stripe';
+import config from "../../config";
+import generateTransactionId from "../../utils/generateTransactionId";
+
+const stripe = new Stripe(config.stripe_secret_key as string);
 
 
-const CreateSubscriptionService = async (employerUserId: string, payload: ISubscription) => {
+const CreateSubscriptionService = async (employerUserId: string, employerEmail: string, payload: ISubscription) => {
     //check planId
     const plan = await PlanModel.findById(payload.planId);
     if (!plan) {
@@ -27,19 +34,68 @@ const CreateSubscriptionService = async (employerUserId: string, payload: ISubsc
         targetDate.setDate(currentDate.getDate() + Number(365));
     }
 
-
     const startDate = currentDate.toISOString()?.split("T")[0];
     const endDate = targetDate.toISOString()?.split("T")[0] + "T23:59:59.999+00:00";
 
-    const result = await SubscriptionModel.create({
-        planId: payload.planId,
-        startDate,
-        endDate,
-        amount: plan.price,
-        userId: employerUserId
-    })
+    const lineItems = [{
+        price_data: {
+            currency: "gbp",
+            product_data: {
+                name: `${plan.name} Subscription (${plan.validity === 'monthly' ? "Monthly" : "Yearly"})`,
+            },
+            unit_amount: Math.round(Number(plan.price) * 100), // in cents
+        },
+        quantity: 1,
+    }]
 
-    return result;
+
+    //generate transactionId
+    const transactionId = generateTransactionId();
+
+    //transaction & rollback
+    const session = await mongoose.startSession();
+
+    try {
+        session.startTransaction();
+
+        const subscription = await SubscriptionModel.create([
+            {
+                userId: employerUserId,
+                planId: payload.planId,
+                startDate,
+                endDate,
+                amount: plan.price,
+                transactionId
+            }
+        ], { session });
+
+
+        //create payment session
+        const paymentSession = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
+            line_items: lineItems,
+            mode: "payment",
+            metadata: {
+                userId: employerUserId,
+                subscriptionId: subscription[0]?._id.toString() as string
+            },
+            customer_email: employerEmail,
+            client_reference_id: subscription[0]?._id.toString() as string,
+            success_url: `${config.frontend_url}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${config.frontend_url}/cancel`,
+        });
+
+        //transaction success
+        await session.commitTransaction();
+        await session.endSession();
+        return {
+            url: paymentSession.url
+        };
+    } catch (err: any) {
+        await session.abortTransaction();
+        await session.endSession();
+        throw new Error(err);
+    }
 }
 
 export default CreateSubscriptionService;
