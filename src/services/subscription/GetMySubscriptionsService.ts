@@ -66,6 +66,11 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
 
     const result = await SubscriptionModel.aggregate([
         {
+            $match: {
+                userId: new Types.ObjectId(employerUserId),
+            },
+        },
+        {
             $lookup: {
                 from: "plans",
                 localField: "planId",
@@ -93,7 +98,6 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
         },
         {
             $match: {
-                userId: new Types.ObjectId(employerUserId),
                 ...searchQuery,
                 ...filterQuery
             },
@@ -106,7 +110,12 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
 
     // total count
     const totalCountResult = await SubscriptionModel.aggregate([
-         {
+        {
+            $match: {
+                userId: new Types.ObjectId(employerUserId),
+            },
+        },
+        {
             $lookup: {
                 from: "plans",
                 localField: "planId",
@@ -134,7 +143,6 @@ const GetMySubscriptionsService = async (employerUserId: string, query: TSubscri
         },
         {
             $match: {
-                userId: new Types.ObjectId(employerUserId),
                 ...searchQuery,
                 ...filterQuery
             }
