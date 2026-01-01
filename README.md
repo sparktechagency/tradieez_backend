@@ -54,7 +54,7 @@ src/
 │   ├── AdminModel.ts               # Admin schema/model
 │   └── UserModel.ts                # User schema/model
 │
-└── index.ts                         # Application entry point
+└── server.ts                         # Application entry point
 ```
 
 ## ⚙️ Environment Variables
