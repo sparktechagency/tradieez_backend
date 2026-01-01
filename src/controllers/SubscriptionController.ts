@@ -1,4 +1,5 @@
 import { SUBSCRIPTION_VALID_FIELDS } from "../constant/subscription.constant";
+import CheckSubscriptionStatusService from "../services/subscription/CheckSubscriptionStatusService";
 import CreateSubscriptionService from "../services/subscription/CreateSubscriptionService";
 import GetMySubscriptionsService from "../services/subscription/GetMySubscriptionsService";
 import GetSubscriptionsService from "../services/subscription/GetSubscriptionsService";
@@ -52,11 +53,24 @@ const getSubscriptions = asyncHandler(async (req, res) => {
 })
 
 
+
+const checkSubscriptionStatus = asyncHandler(async (req, res) => {
+    const { userId } = req.headers;
+    const result = await CheckSubscriptionStatusService(userId as string);
+    res.status(200).json({
+        success: true,
+        message: "Subscription status checked successfully",
+        data: result
+    })
+})
+
+
 const SubscriptionController = {
     createSubscription,
     getMySubscriptions,
     getSubscriptions,
-    verifySession
+    verifySession,
+    checkSubscriptionStatus
 }
 
 export default SubscriptionController;

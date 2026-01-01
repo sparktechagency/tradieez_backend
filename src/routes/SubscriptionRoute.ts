@@ -27,6 +27,11 @@ router.get(
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
   SubscriptionController.getSubscriptions,
 );
+router.get(
+  '/check-subscription-status',
+  AuthMiddleware(UserRole.employer),
+  SubscriptionController.checkSubscriptionStatus,
+);
 
 
 const SubscriptionRoute = router;

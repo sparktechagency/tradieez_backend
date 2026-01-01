@@ -5,11 +5,20 @@ import JobModel from "../../models/Job.Model";
 import isNotObjectId from "../../utils/isNotObjectId";
 import FavoriteJobModel from "../../models/FavoriteJobModel";
 import ApplicationModel from "../../models/ApplicationModel";
+import CheckSubscriptionStatusService from "../subscription/CheckSubscriptionStatusService";
 
 const DeleteMyJobService = async (loginUserId: string, jobId: string) => {
     if (isNotObjectId(jobId)) {
         throw new CustomError(400, "jobId must be a valid ObjectId")
     }
+
+    //check subscription status
+    const status = await CheckSubscriptionStatusService(loginUserId);
+    if(!status.isActive){
+        throw new CustomError(403, "Active subscription required")
+    }
+
+
     const job = await JobModel.findOne({ _id: jobId, userId: loginUserId })
     if(!job){
         throw new CustomError(404, 'This jobId not found');

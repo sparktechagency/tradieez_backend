@@ -2,11 +2,17 @@ import CustomError from "../../errors/CustomError";
 import { IJobPayload } from "../../interfaces/job.interface";
 import CategoryModel from "../../models/CategoryModel";
 import JobModel from "../../models/Job.Model";
+import CheckSubscriptionStatusService from "../subscription/CheckSubscriptionStatusService";
 
 
 const CreateJobService = async (loginUserId: string, payload: IJobPayload) => {
     const { categoryId, longitude, latitude } = payload;
 
+    //check subscription status
+    const status = await CheckSubscriptionStatusService(loginUserId);
+    if(!status.isActive){
+        throw new CustomError(403, "Active subscription required")
+    }
     //check categoryId
     const category = await CategoryModel.findById(categoryId)
     if (!category) {

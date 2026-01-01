@@ -3,6 +3,7 @@ import { IJobPayload } from "../../interfaces/job.interface";
 import CategoryModel from "../../models/CategoryModel";
 import JobModel from "../../models/Job.Model";
 import isNotObjectId from "../../utils/isNotObjectId";
+import CheckSubscriptionStatusService from "../subscription/CheckSubscriptionStatusService";
 
 
 const UpdateMyJobService = async (loginUserId: string, jobId: string, payload: Partial<IJobPayload>) => {
@@ -10,6 +11,12 @@ const UpdateMyJobService = async (loginUserId: string, jobId: string, payload: P
 
     if (isNotObjectId(jobId)) {
         throw new CustomError(400, "jobId must be a valid ObjectId")
+    }
+
+    //check subscription status
+    const status = await CheckSubscriptionStatusService(loginUserId);
+   if(!status.isActive){
+        throw new CustomError(403, "Active subscription required")
     }
 
     //check job
