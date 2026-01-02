@@ -47,6 +47,7 @@ const GetPlansService = async (query: TPlanQuery) => {
                 description: 1,
                 duration: 1,
                 validity: 1,
+                price:1,
                 features: 1,
                 status: 1
             },
