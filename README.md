@@ -67,22 +67,40 @@ Create a `.env` file:
 ```env
 # Server
 NODE_ENV=development
-PORT=5000
-
-# Database
+PORT=8080
 DATABASE_URL=your_database_url
+BCRYPT_SALT_ROUNDS=number_of_salt_rounds
 
 # JWT
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRE=7d
+JWT_VERIFY_EMAIL_SECRET=your_jwt_verify_email_secret
+JWT_ACCESS_SECRET=your_jwt_access_secret
+JWT_REFRESH_SECRET=your_jwt_refresh_secret
+JWT_VERIFY_EMAIL_EXPIRES_IN=10m
+JWT_ACCESS_EXPIRES_IN=7d
+JWT_REFRESH_EXPIRES_IN=15d
+
+# SMTP (Email)
+SMTP_USERNAME=your_smtp_email -- example@gmail.com
+SMTP_PASSWORD=your_smtp_password -- app password
+SMTP_FROM=your_smtp_from_email -- <example@gmail.com>
+
+# Admin
+SUPER_ADMIN_EMAIL=your_super_admin_email
+SUPER_ADMIN_PASSWORD=your_super_admin_password
+SUPER_ADMIN_REG_OTP=your_admin_registration_otp
+ADMIN_DEFAULT_PASSWORD=your_default_admin_password
+
+# Stripe
+STRIPE_SECRET_KEY=your_stripe_secret_key
 
 # Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+CLOUD_NAME=your_cloudinary_cloud_name
+CLOUD_API_KEY=your_cloudinary_api_key
+CLOUD_API_SECRET_KEY=your_cloudinary_api_secret
 
-# CORS
-CLIENT_URL=http://localhost:3000
+# Frontend
+FRONTEND_URL=http://localhost:3000
+
 ```
 
 ## 🔐 Authentication
