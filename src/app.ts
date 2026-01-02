@@ -42,7 +42,8 @@ app.use(
       "http://16.16.183.92:5173",
       "http://16.16.183.92:4173",
       "http://16.16.183.92:3000",
-      "https://tradiezz-dashboard.vercel.app"
+      "https://tradiezz-dashboard.vercel.app",
+      "https://tradiezz-website.vercel.app"
     ],
     credentials: true,
   }),
