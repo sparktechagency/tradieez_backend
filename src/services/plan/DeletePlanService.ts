@@ -18,7 +18,7 @@ const DeletePlanService = async (planId: string) => {
         planId
     });
     if (associatedWitSubscription) {
-        throw new CustomError(409, 'Unable to delete, This Plan is associated with one or more subscriptions');
+        throw new CustomError(409, 'Unable to delete, This Plan is associated with one or more subscriptions !');
     }
 
     const result = await PlanModel.deleteOne({ _id: planId})

@@ -32,8 +32,11 @@ src/
 │   └── index.ts                    # Environment variables & configuration
 │
 ├── controllers/
-│   ├── UserController.ts           # User CRUD operations
+│   ├── AdminController.ts          # Admin added, deleted, updated by Super Admin
+│   ├── ApplicationController.ts    # Job Applications Management
 │   └── AuthController.ts           # Login, Register, Password reset
+│   └── BlogCategoryController.ts   # Blog Category CRUD operations
+│   ├── UserController.ts           # Employer & Candidate management
 │
 ├── helper/
 │   ├── cloudinary.ts               # Cloudinary integration
