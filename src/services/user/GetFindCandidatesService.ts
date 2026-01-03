@@ -1,8 +1,8 @@
 import { Types } from "mongoose";
-import { EmployerSearchableFields } from "../../constant/user.constant";
 import { makeFilterQuery, makeSearchQuery } from "../../helper/QueryBuilder";
 import { TEmployerQuery } from "../../interfaces/employer.interface";
 import CandidateModel from "../../models/CandidateModel";
+import { CANDIDATE_SEARCHABLE_FIELDS } from "../../constant/user.constant";
 
 const GetFindCandidatesService = async (loginEmployerUserId: string, query: TEmployerQuery) => {
   const {
@@ -23,7 +23,7 @@ const GetFindCandidatesService = async (loginEmployerUserId: string, query: TEmp
   //3. setup searching
   let searchQuery = {};
   if (searchTerm) {
-    searchQuery = makeSearchQuery(searchTerm, EmployerSearchableFields);
+    searchQuery = makeSearchQuery(searchTerm, CANDIDATE_SEARCHABLE_FIELDS);
   }
 
   //4. setup filters

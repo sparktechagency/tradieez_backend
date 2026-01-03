@@ -8,6 +8,7 @@ export const UserRole = {
 } as const;
 
 export const EmployerSearchableFields = [ 'fullName', 'email', 'phone'];
+export const CANDIDATE_SEARCHABLE_FIELDS = [ 'fullName', 'email', 'phone', 'address', 'postalCode'];
 
 export const EmployerValidFields: string[] = [
   "searchTerm",
