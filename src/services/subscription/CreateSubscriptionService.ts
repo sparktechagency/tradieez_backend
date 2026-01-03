@@ -81,8 +81,8 @@ const CreateSubscriptionService = async (employerUserId: string, employerEmail: 
             },
             customer_email: employerEmail,
             client_reference_id: subscription[0]?._id.toString() as string,
-            success_url: `${config.frontend_url}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${config.frontend_url}/cancel`,
+            success_url: `${config.frontend_url}/payment/success/{CHECKOUT_SESSION_ID}`,
+            cancel_url: `${config.frontend_url}/payment/cancel`,
         });
 
         //transaction success
