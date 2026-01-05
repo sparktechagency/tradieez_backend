@@ -93,6 +93,14 @@ const candidateSchema = new Schema<ICandidate>({
         type: String,
         required: true,
     },
+    postalCode: {
+        type: String,
+        required: true,
+    },
+    city: {
+        type: String,
+        required: true,
+    },
     skills: {
         type: [String],
         required: true,

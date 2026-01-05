@@ -25,6 +25,8 @@ export interface ICandidate extends Document {
         coordinates: [number, number]; // [longitude, latitude]
     };
     address: string;
+    postalCode: string;
+    city: string;
     skills: string[];
     experience: TExperience,
     isPrivate: boolean,

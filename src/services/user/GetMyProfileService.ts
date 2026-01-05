@@ -58,6 +58,8 @@ const GetMyProfileService = async (userId: string, role: TUserRole) => {
                     subCategoryId: "$subcategory._id",
                     subCategory: "$subcategory.name",
                     address: "$address",
+                    postalCode: "$postalCode",
+                    city: "$city",
                     coordinates: "$location.coordinates",
                     ratings: "$ratings",
                     totalReview: "$totalReviews",
