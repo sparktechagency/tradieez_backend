@@ -24,10 +24,10 @@ import FaqRoute from "./routes/FaqRoute";
 import AdminRoute from "./routes/AdminRoute";
 import PlanRoute from "./routes/PlanRoute";
 import SubscriptionRoute from "./routes/SubscriptionRoute";
+import ChatRoute from "./routes/ChatRoute";
 
 
 const app: Application = express();
-
 
 app.use(
   cors({
@@ -87,6 +87,7 @@ app.use('/api/v1/faq', FaqRoute);
 app.use('/api/v1/admin', AdminRoute);
 app.use('/api/v1/plan', PlanRoute);
 app.use('/api/v1/subscription', SubscriptionRoute);
+app.use('/api/v1/chat', ChatRoute);
 
 //serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "../uploads",)))
