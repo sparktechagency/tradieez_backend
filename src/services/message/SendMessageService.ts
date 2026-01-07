@@ -4,7 +4,6 @@ import ChatModel from "../../models/ChatModel";
 import mongoose, { Types } from "mongoose";
 import { IMessagePayload } from "../../interfaces/message.interface";
 import CustomError from "../../errors/CustomError";
-import { io, userSocketMap } from "../../server";
 import isNotObjectId from "../../utils/isNotObjectId";
 
 const SendMessageService = async (
@@ -29,9 +28,9 @@ const SendMessageService = async (
     throw new CustomError(404, "Converstion not found with the provided Id");
   }
 
-  const receiverId = chat.members
-    .find((cv) => cv.toString() !== loginUserId.toString())
-    ?.toString();
+  // const receiverId = chat.members
+  //   .find((cv) => cv.toString() !== loginUserId.toString())
+  //   ?.toString();
 
   //transaction & rollback
   const session = await mongoose.startSession();
@@ -55,10 +54,10 @@ const SendMessageService = async (
     );
 
     //emit or send the new message to the receiver's socket
-    const receiverSocketId = userSocketMap[receiverId as string];
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", newMessage);
-    }
+    // const receiverSocketId = userSocketMap[receiverId as string];
+    // if (receiverSocketId) {
+    //   io.to(receiverSocketId).emit("newMessage", newMessage);
+    // }
 
     //transaction success
     await session.commitTransaction();

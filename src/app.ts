@@ -30,26 +30,25 @@ import MessageRoute from "./routes/MessageRoute";
 
 const app: Application = express();
 
-app.use(cors({ origin: "*", credentials: true }));
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:5173",
-//       "http://localhost:5174",
-//       "http://localhost:5175",
-//       "http://localhost:3000",
-//       "http://localhost:3001",
-//       "http://localhost:3002",
-//       "http://localhost:3003",
-//       "http://16.16.183.92:5173",
-//       "http://16.16.183.92:4173",
-//       "http://16.16.183.92:3000",
-//       "https://tradiezz-dashboard.vercel.app",
-//       "https://tradiezz-website.vercel.app"
-//     ],
-//     credentials: true,
-//   }),
-// );
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5175",
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "http://localhost:3003",
+      "http://16.16.183.92:5173",
+      "http://16.16.183.92:4173",
+      "http://16.16.183.92:3000",
+      "https://tradiezz-dashboard.vercel.app",
+      "https://tradiezz-website.vercel.app"
+    ],
+    credentials: true,
+  }),
+);
 
 
 app.use(cookieParser())
