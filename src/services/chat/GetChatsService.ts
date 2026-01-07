@@ -34,10 +34,10 @@ const GetChatsService = async (
       {
         $project: {
           _id: 1,
-          text: 1,
           otherUserId: "$otherMembers.userId",
           fullName: "$otherMembers.fullName",
           profileImg: "$otherMembers.profileImg",
+          lastMessage: "$text",
           updatedAt: "$updatedAt",
         },
       },
@@ -73,10 +73,10 @@ const GetChatsService = async (
     {
       $project: {
         _id: 1,
-        text: 1,
         otherUserId: "$otherMembers.userId",
         fullName: "$otherMembers.fullName",
         profileImg: "$otherMembers.profileImg",
+        lastMessage: "$text",
         updatedAt: "$updatedAt",
       },
     },

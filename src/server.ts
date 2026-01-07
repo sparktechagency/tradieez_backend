@@ -1,19 +1,55 @@
-import { Server } from "http";
+import http from "http";
 import app from "./app";
 import dbConnect from "./utils/dbConnect";
 import config from "./config";
 import seedSuperAdmin from "./db";
+import { Server } from "socket.io";
 
-let server: Server;
+
+const server = http.createServer(app);
 
 const port = config.port || 9090;
+
+//Initialize socket.io server
+export const io = new Server(server, {
+  cors: { origin: "*" },
+});
+
+//store online users
+//export const userSocketMap = {}; //{ userId:socketId }
+// userId -> socketId map
+export const userSocketMap: Record<string, string> = {};
+
+
+//socket.io connection handler
+
+io.on("connection", (socket) => {
+  const userId = socket.handshake.query.userId;
+  console.log("User Connected", userId);
+
+  if (userId) {
+    userSocketMap[userId as string] = socket.id;
+  }
+
+  //emit online users to all connected clients
+  io.emit("getOnlineUsers", Object.keys(userSocketMap)); //send online users
+
+  //user disconnected
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", userId);
+    delete userSocketMap[userId as string];
+
+    io.emit("getOnlineUsers", Object.keys(userSocketMap)); //again send online users
+  });
+});
+
 
 
 async function main() {
     try {
       await dbConnect();
       await seedSuperAdmin();
-      server = app.listen(port,  () => {
+      server.listen(port,  () => {
         console.log(`Example app listening on port ${port}`);
       });
 

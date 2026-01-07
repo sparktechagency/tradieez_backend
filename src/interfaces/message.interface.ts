@@ -5,3 +5,8 @@ export interface IMessage extends Document{
   senderId: Types.ObjectId;
   text?: string;
 }
+
+export interface IMessagePayload {
+  text: string;
+  chatId: string;
+}
