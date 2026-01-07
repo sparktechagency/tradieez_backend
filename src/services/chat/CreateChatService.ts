@@ -25,7 +25,7 @@ const CreateChatService = async (
   }
 
   if(loginUserRole === otherUser.role){
-    throw new CustomError(409, "you can't send message between role's user");
+    throw new CustomError(409, "you can't send message between same type user");
   }
 
   const ObjectId = Types.ObjectId;

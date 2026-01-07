@@ -13,6 +13,11 @@ router.post(
   validationMiddleware(createChatSchema),
   ChatController.createChat
 );
+router.get(
+  "/get-chats",
+  AuthMiddleware(UserRole.candidate, UserRole.employer),
+  ChatController.getChats
+);
 
 const ChatRoute = router;
 export default ChatRoute;
