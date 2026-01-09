@@ -11,6 +11,7 @@ import UpdateCandidateProfileService from "../services/user/UpdateCandidateProfi
 import GetCandidateService from "../services/user/GetCandidateService";
 import GetSingleEmployerService from "../services/user/GetSingleEmployerService";
 import GetEmployerService from "../services/user/GetEmployerService";
+import UpdateEmployerProfileService from "../services/user/UpdateEmployerProfileService";
 
 
 const getEmployers = asyncHandler(async (req, res) => {
@@ -105,6 +106,15 @@ const updateCandidateProfile = asyncHandler(async (req, res) => {
         data: result
     })
 })
+const updateEmployerProfile = asyncHandler(async (req, res) => {
+    //const { userId } = req.headers;
+    const result = await UpdateEmployerProfileService();
+    res.status(200).json({
+        success: true,
+        message: 'Profile is updated successfully',
+        data: result
+    })
+})
 
 
 
@@ -117,7 +127,8 @@ const UserController = {
     getSingleEmployer,
     getEmployer,
     getMyProfile,
-    updateCandidateProfile
+    updateCandidateProfile,
+    updateEmployerProfile
 }
 
 export default UserController;

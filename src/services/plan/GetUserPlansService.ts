@@ -11,6 +11,7 @@ const GetUserPlansService = async () => {
             $project: {
                 _id: 1,
                 name: 1,
+                price:1,
                 description:1,
                 duration:1,
                 validity:1,

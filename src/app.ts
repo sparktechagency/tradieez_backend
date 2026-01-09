@@ -26,6 +26,7 @@ import PlanRoute from "./routes/PlanRoute";
 import SubscriptionRoute from "./routes/SubscriptionRoute";
 import ChatRoute from "./routes/ChatRoute";
 import MessageRoute from "./routes/MessageRoute";
+import DashboardRoute from "./routes/DashboardRoute";
 
 
 const app: Application = express();
@@ -90,6 +91,7 @@ app.use('/api/v1/plan', PlanRoute);
 app.use('/api/v1/subscription', SubscriptionRoute);
 app.use('/api/v1/chat', ChatRoute);
 app.use('/api/v1/message', MessageRoute);
+app.use('/api/v1/dashboard', DashboardRoute);
 
 //serve uploads folder
 app.use("/uploads", express.static(path.join(__dirname, "../uploads",)))

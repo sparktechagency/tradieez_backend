@@ -55,6 +55,13 @@ router.patch(
   validationMiddleware(updateCandidateSchema),
   UserController.updateCandidateProfile
 );
+router.patch(
+  '/update-employer-profile',
+  AuthMiddleware("employer"),
+  upload.single("image"),
+  validationMiddleware(updateCandidateSchema),
+  UserController.updateEmployerProfile
+);
 
 
 const UserRoute = router;
