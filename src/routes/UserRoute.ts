@@ -62,6 +62,11 @@ router.patch(
   validationMiddleware(updateCandidateSchema),
   UserController.updateEmployerProfile
 );
+router.patch(
+  '/send-request/:userId',
+  AuthMiddleware("employer"),
+  UserController.sendRequest
+);
 
 
 const UserRoute = router;

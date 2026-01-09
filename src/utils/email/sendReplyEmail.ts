@@ -15,7 +15,7 @@ const sendReplyEmail = async (email: string, replyMessage: string) => {
 
 
   const mailOptions = {
-    from: `Tradiezz Service ${config.smtp_from}`, //sender email address//smtp-username
+    from: `Tradieez Service ${config.smtp_from}`, //sender email address//smtp-username
     to: email, //receiver email address
     subject: "Reply Message",
     html: `
@@ -54,7 +54,7 @@ const sendReplyEmail = async (email: string, replyMessage: string) => {
                         </div>
                         
                         <!-- Company Name -->
-                        <h1 style="color: #ffffff; margin: 0 0 8px 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">Tradiezz Service</h1>
+                        <h1 style="color: #ffffff; margin: 0 0 8px 0; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">Tradieez Service</h1>
                         <p style="color: #d1fae5; margin: 0; font-size: 18px; font-weight: 500;">Customer Support Reply</p>
                       </td>
                     </tr>
@@ -89,7 +89,7 @@ const sendReplyEmail = async (email: string, replyMessage: string) => {
                           <!-- Support Team Signature -->
                           <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid #d1fae5;">
                             <p style="color: #059669; margin: 0; font-size: 14px; font-weight: 600;">
-                              — Tradiezz Service Support Team
+                              — Tradieez Service Support Team
                             </p>
                           </div>
                         </div>

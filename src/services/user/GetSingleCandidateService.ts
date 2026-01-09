@@ -72,6 +72,8 @@ const GetSingleCandidateService = async (candidateUserId: string) => {
                 subCategory: "$subcategory.name",
                 address: "$address",
                 coordinates: "$location.coordinates",
+                postalCode: "$postalCode",
+                city: "$city",
                 ratings: "$ratings",
                 totalReview: "$totalReviews",
                 description: "$description"

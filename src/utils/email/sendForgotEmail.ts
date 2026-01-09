@@ -14,14 +14,14 @@ const sendForgotEmail = async (EmailTo: string, otp: string) => {
   });
 
   const mailOptions = {
-    from: `Tradiezz Service ${config.smtp_from}`, //sender email address//smtp-username
+    from: `Tradieez Service ${config.smtp_from}`, //sender email address//smtp-username
     to: EmailTo, //receiver email address
     subject: "Reset Password",
      html: `
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f8fafc;">
       <!-- Header -->
       <div style="background-color: #1f2937; padding: 40px 20px; text-align: center; border-radius: 12px 12px 0 0;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Tradiezz Service</h1>
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 700;">Tradieez Service</h1>
         <p style="color: #9ca3af; margin: 8px 0 0 0; font-size: 16px;">Password Reset Request</p>
       </div>
       

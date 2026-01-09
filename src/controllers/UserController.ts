@@ -12,6 +12,7 @@ import GetCandidateService from "../services/user/GetCandidateService";
 import GetSingleEmployerService from "../services/user/GetSingleEmployerService";
 import GetEmployerService from "../services/user/GetEmployerService";
 import UpdateEmployerProfileService from "../services/user/UpdateEmployerProfileService";
+import SendRequestService from "../services/user/SendRequestService";
 
 
 const getEmployers = asyncHandler(async (req, res) => {
@@ -117,6 +118,18 @@ const updateEmployerProfile = asyncHandler(async (req, res) => {
 })
 
 
+const sendRequest = asyncHandler(async (req, res) => {
+    const { fullName } = req.headers
+    const { userId } = req.params;
+    const result = await SendRequestService(fullName as string, userId as string);
+    res.status(200).json({
+        success: true,
+        message: 'Request is sent successfully',
+        data: result
+    })
+})
+
+
 
 const UserController = {
     getEmployers,
@@ -128,7 +141,8 @@ const UserController = {
     getEmployer,
     getMyProfile,
     updateCandidateProfile,
-    updateEmployerProfile
+    updateEmployerProfile,
+    sendRequest
 }
 
 export default UserController;
