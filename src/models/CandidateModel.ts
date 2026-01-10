@@ -122,6 +122,10 @@ const candidateSchema = new Schema<ICandidate>({
         type: String,
         default: ''
     },
+    cv: {
+        type: String,
+        default: ''
+    },
     dateOfBirth: {
         type: Date,
         required: true

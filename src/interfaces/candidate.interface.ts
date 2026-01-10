@@ -32,6 +32,7 @@ export interface ICandidate extends Document {
     isPrivate: boolean,
     description: string;
     dateOfBirth: Date;
+    cv: string;
 }
 
 

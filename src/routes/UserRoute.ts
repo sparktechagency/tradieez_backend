@@ -5,69 +5,95 @@ import UserController from "../controllers/UserController";
 import validationMiddleware from "../middlewares/validationMiddleware";
 import { updateCandidateSchema } from "../validation/candidate.validation";
 import upload from "../helper/upload";
+import { updateEmployerSchema } from "../validation/employer.validation";
+import { uploadCV } from "../helper/uploadCV";
+import CustomError from "../errors/CustomError";
+import CandidateModel from "../models/CandidateModel";
 
 const router = express.Router();
 
 router.get(
-  '/get-employers',
+  "/get-employers",
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
   UserController.getEmployers
 );
 router.get(
-  '/get-candidates',
+  "/get-candidates",
   AuthMiddleware(UserRole.admin, UserRole.superAdmin),
   UserController.getCandidates
 );
 router.get(
-  '/get-find-candidates',
+  "/get-find-candidates",
   AuthMiddleware(UserRole.employer),
   UserController.getFindCandidates
 );
 router.get(
-  '/get-single-candidate/:userId',
+  "/get-single-candidate/:userId",
   AuthMiddleware("employer"),
   UserController.getSingleCandidate
 );
 router.get(
-  '/get-candidate/:userId',
+  "/get-candidate/:userId",
   AuthMiddleware("admin", "superAdmin"),
   UserController.getCandidate
 );
 router.get(
-  '/get-single-employer/:userId',
+  "/get-single-employer/:userId",
   AuthMiddleware("candidate"),
   UserController.getSingleEmployer
 );
 router.get(
-  '/get-employer/:userId',
+  "/get-employer/:userId",
   AuthMiddleware("admin", "superAdmin"),
   UserController.getEmployer
 );
 router.get(
-  '/get-my-profile',
+  "/get-my-profile",
   AuthMiddleware("admin", "superAdmin", "candidate", "employer"),
   UserController.getMyProfile
 );
 router.patch(
-  '/update-candidate-profile',
+  "/update-candidate-profile",
   AuthMiddleware("candidate"),
   upload.single("image"),
   validationMiddleware(updateCandidateSchema),
   UserController.updateCandidateProfile
 );
 router.patch(
-  '/update-employer-profile',
+  "/update-employer-profile",
   AuthMiddleware("employer"),
   upload.single("image"),
-  validationMiddleware(updateCandidateSchema),
+  validationMiddleware(updateEmployerSchema),
   UserController.updateEmployerProfile
 );
 router.patch(
-  '/send-request/:userId',
+  "/send-request/:userId",
   AuthMiddleware("employer"),
   UserController.sendRequest
 );
 
+router.post(
+  "/upload-cv",
+  AuthMiddleware("candidate"),
+  uploadCV.single("cv"),
+  async (req, res) => {
+    const candidateUserId = req.headers.userId;
+    if (!req.file) {
+      throw new CustomError(400, "PDF file is required");
+    }
+
+    const result = await CandidateModel.updateOne(
+      { userId: candidateUserId },
+      { cv: req.file?.path } //
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "CV is uploaded successfully",
+      data: result,
+    });
+  }
+);
 
 const UserRoute = router;
 export default UserRoute;
