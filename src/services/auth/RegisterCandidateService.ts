@@ -12,6 +12,8 @@ const RegisterCandidateService = async (reqBody: IRegisterCandidatePayload) => {
     email,
     fullName,
     phone,
+    title,
+    jobSeekerTitle,
     subCategoryId,
     password,
     workRate,
@@ -25,7 +27,6 @@ const RegisterCandidateService = async (reqBody: IRegisterCandidatePayload) => {
     postalCode,
     skills,
     experience,
-    dateOfBirth,
   } = reqBody;
 
   //check email
@@ -93,6 +94,8 @@ const RegisterCandidateService = async (reqBody: IRegisterCandidatePayload) => {
           email,
           fullName,
           phone,
+          title,
+          jobSeekerTitle,
           categoryId: subCategory.categoryId,
           subCategoryId,
           workRate,
@@ -105,7 +108,6 @@ const RegisterCandidateService = async (reqBody: IRegisterCandidatePayload) => {
           postalCode,
           skills,
           experience,
-          dateOfBirth,
         },
       ],
       { session }
