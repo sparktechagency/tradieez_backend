@@ -45,12 +45,12 @@ const candidateSchema = new Schema<ICandidate>(
       required: [true, "title is required"],
       trim: true,
     },
-    jobSeekerTitle: {
+    jobSeekingTitle: {
       type: [String],
       required: true,
       validate: {
         validator: (v: string[]) => v.length > 0,
-        message: "At least one job seeker title is required",
+        message: "At least one job seeking title is required",
       },
     },
     categoryId: {

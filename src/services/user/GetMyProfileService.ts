@@ -53,6 +53,8 @@ const GetMyProfileService = async (userId: string, role: TUserRole) => {
                     employmentType: 1,
                     skills: 1,
                     experience: 1,
+                    title:1,
+                    jobSeekingTitle: 1,
                     categoryId: "$categoryId",
                     category: "$category.name",
                     subCategoryId: "$subcategory._id",

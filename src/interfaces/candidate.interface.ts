@@ -12,7 +12,7 @@ export interface ICandidate extends Document {
   phone: string;
   profileImg: string;
   title: string;
-  jobSeekerTitle: string[];
+  jobSeekingTitle: string[];
   categoryId: Types.ObjectId;
   subCategoryId: Types.ObjectId;
   ratings: number;
@@ -40,7 +40,7 @@ export interface IUpdateCandidatePayload {
   phone: string;
   profileImg: string;
   title: string;
-  jobSeekerTitle: string[];
+  jobSeekingTitle: string[];
   categoryId: Types.ObjectId;
   subCategoryId: Types.ObjectId;
   ratings: number;

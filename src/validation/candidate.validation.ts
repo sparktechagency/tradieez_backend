@@ -46,18 +46,18 @@ export const registerCandidateValidationSchema = z.object({
     })
     .trim()
     .min(1, "title is required"),
-  jobSeekerTitle: z
+  jobSeekingTitle: z
     .array(
       z.string({
-        required_error: "Job seeker title is required",
-        invalid_type_error: "Job seeker title must be string",
+        required_error: "Job seeking title is required",
+        invalid_type_error: "Job seeking title must be string",
       }),
       {
-        required_error: "jobSeekerTitle must be an array of strings",
-        invalid_type_error: "jobSeekerTitle must be an array of strings",
+        required_error: "jobSeeking Title must be an array of strings",
+        invalid_type_error: "jobSeekingTitle must be an array of strings",
       }
     )
-    .min(1, "You must add at least one jobSeekerTitle !")
+    .min(1, "You must add at least one jobSeekingTitle !")
     .superRefine((arr, ctx) => {
       if (arr && arr?.length > 0) {
         const duplicates = arr.filter(
@@ -66,7 +66,7 @@ export const registerCandidateValidationSchema = z.object({
         if (duplicates.length > 0) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
-            message: "Job Seeker Title must not contain duplicate values",
+            message: "Job Seeking Title must not contain duplicate values",
           });
         }
       }
@@ -216,7 +216,7 @@ export const registerCandidateValidationSchema = z.object({
     })
     .refine((val) => ["entry", "mid", "senior", "expert"].includes(val), {
       message: "experience must be one of: 'entry', 'mid', 'senior', 'expert'",
-    })
+    }),
 });
 
 export const updateCandidateSchema = z
@@ -251,31 +251,43 @@ export const updateCandidateSchema = z
       .trim()
       .min(1, "title is required")
       .optional(),
-    jobSeekerTitle: z
-      .array(
-        z.string({
-          required_error: "Job seeker title is required",
-          invalid_type_error: "Job seeker title must be string",
-        }),
-        {
-          required_error: "jobSeekerTitle must be an array of strings",
-          invalid_type_error: "jobSeekerTitle must be an array of strings",
-        }
-      )
-      .min(1, "You must add at least one jobSeekerTitle !")
-      .superRefine((arr, ctx) => {
-        if (arr && arr?.length > 0) {
-          const duplicates = arr.filter(
-            (item, index) => arr.indexOf(item) !== index
-          );
-          if (duplicates.length > 0) {
-            ctx.addIssue({
-              code: z.ZodIssueCode.custom,
-              message: "Job Seeker Title must not contain duplicate values",
-            });
+    jobSeekingTitle: z
+      .preprocess(
+        (val) => {
+          if (typeof val === "string") {
+            return [val.toString()];
           }
-        }
-      })
+          if (Array.isArray(val)) {
+            return val;
+          }
+          return [];
+        },
+        z
+          .array(
+            z.string({
+              required_error: "Job seeking title is required",
+              invalid_type_error: "jobSeekingTitle must be string",
+            }),
+            {
+              required_error: "jobSeekingTitle must be an array of strings",
+              invalid_type_error: "jobSeekingTitle must be an array of strings",
+            }
+          )
+          .min(1, "You must add at least one jobSeekingTitle !")
+          .superRefine((arr, ctx) => {
+            if (arr && arr?.length > 0) {
+              const duplicates = arr.filter(
+                (item, index) => arr.indexOf(item) !== index
+              );
+              if (duplicates.length > 0) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: "Job seeking title must not contain duplicate values",
+                });
+              }
+            }
+          })
+      )
       .optional(),
     subCategoryId: z
       .string({
