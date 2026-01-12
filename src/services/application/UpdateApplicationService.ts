@@ -4,6 +4,9 @@ import { IApplication } from "../../interfaces/application.interface";
 import ApplicationModel from "../../models/ApplicationModel";
 import sendApplicationAcceptedEmail from "../../utils/email/sendApplicationAcceptedEmail";
 import isNotObjectId from "../../utils/isNotObjectId";
+import sendApplicationShortlistedEmail from "../../utils/email/sendApplicationShortlistedEmail";
+import sendApplicationRejectedEmail from "../../utils/email/sendApplicationRejectedEmail";
+import sendApplicationCancelledEmail from "../../utils/email/sendApplicationCancelledEmail";
 
 const UpdateApplicationService = async (
   loginEmployerUserId: string,
@@ -71,6 +74,30 @@ const UpdateApplicationService = async (
   if (payload.status) {
     if (payload.status === "accepted") {
       await sendApplicationAcceptedEmail(
+        application[0].candidateEmail,
+        application[0].candidateName,
+        employerName,
+        application[0].title
+      );
+    }
+    if (payload.status === "shortlisted") {
+      await sendApplicationShortlistedEmail(
+        application[0].candidateEmail,
+        application[0].candidateName,
+        employerName,
+        application[0].title
+      );
+    }
+    if (payload.status === "rejected") {
+      await sendApplicationRejectedEmail(
+        application[0].candidateEmail,
+        application[0].candidateName,
+        employerName,
+        application[0].title
+      );
+    }
+    if (payload.status === "cancelled") {
+      await sendApplicationCancelledEmail(
         application[0].candidateEmail,
         application[0].candidateName,
         employerName,
