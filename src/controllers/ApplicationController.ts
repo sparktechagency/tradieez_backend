@@ -93,9 +93,9 @@ const getSingleApplication = asyncHandler(async (req, res) => {
 })
 
 const updateApplication = asyncHandler(async (req, res) => {
-    const { userId } = req.headers;
+    const { userId, fullName } = req.headers;
     const { applicationId } = req.params;
-    const result = await UpdateApplicationService(userId as string, applicationId as string, req.body);
+    const result = await UpdateApplicationService(userId as string, fullName as string, applicationId as string, req.body);
     res.status(200).json({
         success: true,
         message: "Application is updated successfully",

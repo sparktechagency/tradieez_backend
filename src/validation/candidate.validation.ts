@@ -40,12 +40,30 @@ export const registerCandidateValidationSchema = z.object({
     .min(6, "Password minimum 6 characters long")
     .max(60, "Password maximum 60 characters long"),
   title: z
-    .string({
-      invalid_type_error: "title must be string",
-      required_error: "title is required",
-    })
-    .trim()
-    .min(1, "title is required"),
+    .array(
+      z.string({
+        required_error: "title is required",
+        invalid_type_error: "title must be string",
+      }),
+      {
+        required_error: "title must be an array of strings",
+        invalid_type_error: "title must be an array of strings",
+      }
+    )
+    .min(1, "You must add at least one title !")
+    .superRefine((arr, ctx) => {
+      if (arr && arr?.length > 0) {
+        const duplicates = arr.filter(
+          (item, index) => arr.indexOf(item) !== index
+        );
+        if (duplicates.length > 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "title must not contain duplicate values",
+          });
+        }
+      }
+    }),
   jobSeekingTitle: z
     .array(
       z.string({
@@ -244,12 +262,43 @@ export const updateCandidateSchema = z
       })
       .optional(),
     title: z
-      .string({
-        invalid_type_error: "title must be string",
-        required_error: "title is required",
-      })
-      .trim()
-      .min(1, "title is required")
+      .preprocess(
+        (val) => {
+          if (typeof val === "string") {
+            return [val.toString()];
+          }
+          if (Array.isArray(val)) {
+            return val;
+          }
+          return [];
+        },
+        z
+          .array(
+            z.string({
+              required_error: "title is required",
+              invalid_type_error: "title must be string",
+            }),
+            {
+              required_error: "title must be an array of strings",
+              invalid_type_error: "title must be an array of strings",
+            }
+          )
+          .min(1, "You must add at least one title !")
+          .superRefine((arr, ctx) => {
+            if (arr && arr?.length > 0) {
+              const duplicates = arr.filter(
+                (item, index) => arr.indexOf(item) !== index
+              );
+              if (duplicates.length > 0) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message:
+                    "title must not contain duplicate values",
+                });
+              }
+            }
+          })
+      )
       .optional(),
     jobSeekingTitle: z
       .preprocess(
@@ -282,7 +331,8 @@ export const updateCandidateSchema = z
               if (duplicates.length > 0) {
                 ctx.addIssue({
                   code: z.ZodIssueCode.custom,
-                  message: "Job seeking title must not contain duplicate values",
+                  message:
+                    "Job seeking title must not contain duplicate values",
                 });
               }
             }

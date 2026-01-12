@@ -41,9 +41,12 @@ const candidateSchema = new Schema<ICandidate>(
       default: "",
     },
     title: {
-      type: String,
-      required: [true, "title is required"],
-      trim: true,
+      type: [String],
+      required: true,
+      validate: {
+        validator: (v: string[]) => v.length > 0,
+        message: "At least one title is required",
+      },
     },
     jobSeekingTitle: {
       type: [String],
@@ -139,7 +142,7 @@ const candidateSchema = new Schema<ICandidate>(
     cv: {
       type: String,
       default: "",
-    }
+    },
   },
   {
     timestamps: true,

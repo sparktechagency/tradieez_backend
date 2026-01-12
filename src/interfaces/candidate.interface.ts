@@ -11,7 +11,7 @@ export interface ICandidate extends Document {
   email: string;
   phone: string;
   profileImg: string;
-  title: string;
+  title: string[];
   jobSeekingTitle: string[];
   categoryId: Types.ObjectId;
   subCategoryId: Types.ObjectId;

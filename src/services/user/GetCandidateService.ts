@@ -41,6 +41,8 @@ const GetCandidateService = async (userId: string) => {
                 phone: 1,
                 profileImg: 1,
                 availableDate: 1,
+                title:1,
+                jobSeekingTitle:1,
                 workRate:1,
                 workType:1,
                 employmentType:1,
