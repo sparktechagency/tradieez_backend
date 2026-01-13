@@ -7,10 +7,14 @@ import isNotObjectId from "../../utils/isNotObjectId";
 import sendApplicationShortlistedEmail from "../../utils/email/sendApplicationShortlistedEmail";
 import sendApplicationRejectedEmail from "../../utils/email/sendApplicationRejectedEmail";
 import sendApplicationCancelledEmail from "../../utils/email/sendApplicationCancelledEmail";
+import sendJobRunningEmail from "../../utils/email/sendJobRunningEmail";
+import sendJobCompletedEmail from "../../utils/email/sendJobCompletedEmail";
+import sendJobStoppedEmail from "../../utils/email/sendJobStoppedEmail";
 
 const UpdateApplicationService = async (
   loginEmployerUserId: string,
   employerName: string,
+  employerEmail: string,
   applicationId: string,
   payload: Partial<IApplication>
 ) => {
@@ -93,6 +97,7 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         employerName,
+        employerEmail,
         application[0].title
       );
     }
@@ -101,7 +106,36 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         employerName,
+        employerEmail,
         application[0].title
+      );
+    }
+  }
+
+  //if workStatus is available
+  if (payload.workStatus) {
+    if (payload.workStatus === "running") {
+      await sendJobRunningEmail(
+        application[0].candidateEmail,
+        application[0].candidateName,
+        application[0].title,
+        employerEmail
+      );
+    }
+    if (payload.workStatus === "completed") {
+      await sendJobCompletedEmail(
+        application[0].candidateEmail,
+        application[0].candidateName,
+        application[0].title,
+        employerEmail
+      );
+    }
+    if (payload.workStatus === "stopped") {
+      await sendJobStoppedEmail(
+        application[0].candidateEmail,
+        application[0].candidateName,
+        application[0].title,
+        employerEmail
       );
     }
   }

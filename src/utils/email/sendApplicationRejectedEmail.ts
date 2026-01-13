@@ -5,6 +5,7 @@ const sendApplicationRejectedEmail = async (
   email: string,
   applicantName: string,
   employerName: string,
+  employerEmail: string,
   jobTitle: string
 ) => {
   const transporter = nodemailer.createTransport({
@@ -45,6 +46,10 @@ const sendApplicationRejectedEmail = async (
           Thank you for taking the time to apply for the position of
           <strong>${jobTitle}</strong> with <strong>${employerName}</strong>.
         </p>
+        <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 16px; line-height: 1.6;">
+          For more information, please contact the employer directly at 
+          <a href="mailto:${employerEmail}" style="color: #dc2626; text-decoration: underline;">${employerEmail}</a>.
+        </p>
 
         <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 16px; line-height: 1.6;">
           After careful consideration, we regret to inform you that your application has not been selected at this time.
@@ -59,6 +64,7 @@ const sendApplicationRejectedEmail = async (
             We encourage you to keep your profile updated and apply for other opportunities that match your skills and experience.
           </p>
         </div>
+
         <p style="color: #6b7280; margin-top: 30px; font-size: 14px;">
           We appreciate your interest and wish you the very best in your job search.<br/><br/>
           Kind regards,<br/>

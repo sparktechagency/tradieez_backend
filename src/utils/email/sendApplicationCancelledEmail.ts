@@ -5,6 +5,7 @@ const sendApplicationCancelledEmail = async (
   email: string,
   applicantName: string,
   employerName: string,
+  employerEmail: string,
   jobTitle: string
 ) => {
   const transporter = nodemailer.createTransport({
@@ -44,6 +45,10 @@ const sendApplicationCancelledEmail = async (
         <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 16px; line-height: 1.6;">
           This is to inform you that your application for the position of
           <strong>${jobTitle}</strong> with <strong>${employerName}</strong> has been cancelled.
+        </p>
+        <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 16px; line-height: 1.6;">
+          For more information, please contact the employer directly at 
+          <a href="mailto:${employerEmail}" style="color: #dc2626; text-decoration: underline;">${employerEmail}</a>.
         </p>
         <p style="color: #6b7280; margin-top: 30px; font-size: 14px;">
           Thank you for your understanding.<br/><br/>
