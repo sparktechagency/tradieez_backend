@@ -91,6 +91,7 @@ const GetApplicationsService = async (loginEmployerUserId: string, query: TAppli
                 candidateName: "$candidate.fullName",
                 candidateEmail: "$candidate.email",
                 candidateImg: "$candidate.profileImg",
+                candidateCV: "$cv",
                 status: '$status',
                 workStatus: "$workStatus",
                 createdAt: "$createdAt",

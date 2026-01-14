@@ -52,6 +52,7 @@ const ApplyJobService = async (loginUserId: string, payload: IApplication) => {
     jobId: payload.jobId,
     employerUserId: job.userId,
     candidateUserId: loginUserId,
+    cv: myProfile.cv
   });
 
   return result;

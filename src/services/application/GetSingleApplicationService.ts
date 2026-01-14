@@ -9,7 +9,6 @@ const GetSingleApplicationService = async (loginEmployerUserId: string, applicat
         throw new CustomError(400, "applicationId must be a valid ObjectId")
     }
 
-
     const result = await ApplicationModel.aggregate([
         {
             $match: {
@@ -108,6 +107,7 @@ const GetSingleApplicationService = async (loginEmployerUserId: string, applicat
                 candidateEmail: "$candidate.email",
                 candidatePhone: "$candidate.phone",
                 candidateImg: "$candidate.profileImg",
+                candidateCV: "$cv",
                 status: '$status',
                 workStatus: "$workStatus",
                 isReview: "$isReview",

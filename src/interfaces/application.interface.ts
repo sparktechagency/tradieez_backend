@@ -7,6 +7,7 @@ export interface IApplication extends Document {
   jobId: Types.ObjectId;
   employerUserId: Types.ObjectId;
   candidateUserId: Types.ObjectId;
+  cv: string;
   status: TApplicationStatus;
   workStatus: TWorkStatus;
 };
