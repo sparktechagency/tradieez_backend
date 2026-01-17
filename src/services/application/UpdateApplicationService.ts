@@ -16,7 +16,7 @@ const UpdateApplicationService = async (
   employerName: string,
   employerEmail: string,
   applicationId: string,
-  payload: Partial<IApplication>
+  payload: Partial<IApplication>,
 ) => {
   if (isNotObjectId(applicationId)) {
     throw new CustomError(400, "applicationId must be a valid ObjectId");
@@ -54,6 +54,7 @@ const UpdateApplicationService = async (
     },
     {
       $project: {
+        status: 1,
         title: "$job.title",
         candidateName: "$candidate.fullName",
         candidateEmail: "$candidate.email",
@@ -65,6 +66,14 @@ const UpdateApplicationService = async (
     throw new CustomError(404, "Application not found with the provided ID");
   }
 
+  //check workStatus is available, but still status is not accepted
+  if (payload.workStatus && application[0].status !== "accepted") {
+    throw new CustomError(
+      400,
+      "Work status can only be updated after the application has been accepted.",
+    );
+  }
+
   //update application
   const result = await ApplicationModel.updateOne(
     {
@@ -72,7 +81,7 @@ const UpdateApplicationService = async (
       employerUserId: loginEmployerUserId,
     },
     payload,
-    { runValidators: true }
+    { runValidators: true },
   );
 
   if (payload.status) {
@@ -81,7 +90,7 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         employerName,
-        application[0].title
+        application[0].title,
       );
     }
     if (payload.status === "shortlisted") {
@@ -89,7 +98,7 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         employerName,
-        application[0].title
+        application[0].title,
       );
     }
     if (payload.status === "rejected") {
@@ -98,7 +107,7 @@ const UpdateApplicationService = async (
         application[0].candidateName,
         employerName,
         employerEmail,
-        application[0].title
+        application[0].title,
       );
     }
     if (payload.status === "cancelled") {
@@ -107,7 +116,7 @@ const UpdateApplicationService = async (
         application[0].candidateName,
         employerName,
         employerEmail,
-        application[0].title
+        application[0].title,
       );
     }
   }
@@ -119,7 +128,7 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         application[0].title,
-        employerEmail
+        employerEmail,
       );
     }
     if (payload.workStatus === "completed") {
@@ -127,7 +136,7 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         application[0].title,
-        employerEmail
+        employerEmail,
       );
     }
     if (payload.workStatus === "stopped") {
@@ -135,7 +144,7 @@ const UpdateApplicationService = async (
         application[0].candidateEmail,
         application[0].candidateName,
         application[0].title,
-        employerEmail
+        employerEmail,
       );
     }
   }
