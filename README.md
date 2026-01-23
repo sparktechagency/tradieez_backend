@@ -145,7 +145,7 @@ NODE_ENV=development
 PORT=8080
 
 # Database
-DATABASE_URL=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/tradiezz-backend?appName=Cluster0
+DATABASE_URL=your_mongodb_database_url
 
 # JWT Secrets (Change these in production!)
 JWT_VERIFY_EMAIL_SECRET=verify_email_secret
