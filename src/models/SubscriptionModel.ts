@@ -24,7 +24,6 @@ const subscriptionSchema = new Schema<ISubscription>({
     amount: {
         type: Number,
         required: true,
-        trim: true,
     },
     paymentId: {
         type: String,

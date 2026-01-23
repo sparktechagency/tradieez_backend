@@ -1,8 +1,8 @@
 import CustomError from "../../errors/CustomError";
-import UserModel from "../../models/UserModel";
+import SubscriptionModel from "../../models/SubscriptionModel";
 import isValidYearFormat from "../../utils/isValidateYearFormat";
 
-const GetUserOverviewService = async (year: string) => {
+const GetIncomeOverviewService = async (year: string) => {
   if (!isValidYearFormat(year)) {
     throw new CustomError(
       400,
@@ -11,16 +11,13 @@ const GetUserOverviewService = async (year: string) => {
   }
 
   const start = `${year}-01-01T00:00:00.000+00:00`;
-   const end = `${year}-12-31T11:59:59.999+00:00`;
+  const end = `${year}-12-31T11:59:59.999+00:00`;
 
-  const result = await UserModel.aggregate([
+  const result = await SubscriptionModel.aggregate([
     {
       $match: {
         createdAt: { $gte: new Date(start), $lte: new Date(end) },
-        $or: [
-            { role: "candidate"},
-            { role: "employer"}
-        ],
+        paymentStatus: "paid",
       },
     },
     {
@@ -29,7 +26,7 @@ const GetUserOverviewService = async (year: string) => {
           year: { $year: "$createdAt" },
           month: { $month: "$createdAt" },
         },
-        users: { $sum: 1 },
+        income: { $sum: "$amount" },
       },
     },
     {
@@ -40,6 +37,7 @@ const GetUserOverviewService = async (year: string) => {
     },
     {
       $addFields: {
+        income: { $round: ["$income", 2] },
         month: {
           $arrayElemAt: [
             [
@@ -69,7 +67,7 @@ const GetUserOverviewService = async (year: string) => {
     },
   ]);
 
-  //Fill in missing months
+  // Fill in missing months
   const allMonths = [
     "Jan",
     "Feb",
@@ -89,11 +87,11 @@ const GetUserOverviewService = async (year: string) => {
     const found = result?.find((item) => item.month === month);
     return {
       month,
-      users: found ? found.users : 0,
+      income: found ? found.income : 0,
     };
   });
 
   return filledData;
 };
 
-export default GetUserOverviewService;
+export default GetIncomeOverviewService;
