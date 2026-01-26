@@ -41,9 +41,8 @@ app.use(
       "http://localhost:3001",
       "http://localhost:3002",
       "http://localhost:3003",
-      "http://16.16.183.92:5173",
-      "http://16.16.183.92:4173",
-      "http://16.16.183.92:3000",
+      "http://204.197.173.28:3000",
+      "http://204.197.173.28:5173",
       "https://tradiezz-dashboard.vercel.app",
       "https://tradiezz-website.vercel.app"
     ],
