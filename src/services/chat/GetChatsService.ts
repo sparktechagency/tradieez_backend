@@ -1,11 +1,22 @@
+import { CHAT_SEARCHABLE_Fields } from "../../constant/chat.constant";
+import { makeSearchQuery } from "../../helper/QueryBuilder";
+import { TChatQuery } from "../../interfaces/chat.interface";
 import { TUserRole } from "../../interfaces/user.interface";
 import ChatModel from "../../models/ChatModel";
 import { Types } from "mongoose";
 
 const GetChatsService = async (
   loginUserId: string,
-  loginUserRole: TUserRole
+  loginUserRole: TUserRole,
+  query: TChatQuery,
 ) => {
+  const { searchTerm } = query;
+
+  let searchQuery = {};
+  if (searchTerm) {
+    searchQuery = makeSearchQuery(searchTerm, CHAT_SEARCHABLE_Fields);
+  }
+
   if (loginUserRole === "candidate") {
     const result = await ChatModel.aggregate([
       { $match: { members: { $in: [new Types.ObjectId(loginUserId)] } } },
@@ -34,11 +45,16 @@ const GetChatsService = async (
       {
         $project: {
           _id: 1,
-          otherUserId: "$otherMembers.userId",
+          receiverId: "$otherMembers.userId",
           fullName: "$otherMembers.fullName",
           profileImg: "$otherMembers.profileImg",
           lastMessage: "$text",
           updatedAt: "$updatedAt",
+        },
+      },
+      {
+        $match: {
+          ...searchQuery,
         },
       },
     ]);
@@ -73,11 +89,16 @@ const GetChatsService = async (
     {
       $project: {
         _id: 1,
-        otherUserId: "$otherMembers.userId",
+        receiverId: "$otherMembers.userId",
         fullName: "$otherMembers.fullName",
         profileImg: "$otherMembers.profileImg",
         lastMessage: "$text",
         updatedAt: "$updatedAt",
+      },
+    },
+    {
+      $match: {
+        ...searchQuery,
       },
     },
   ]);

@@ -9,3 +9,7 @@ export interface ICreateChatPylaod {
   partnerId: string;
   text: string;
 }
+
+export type TChatQuery = {
+  searchTerm?: string;
+}

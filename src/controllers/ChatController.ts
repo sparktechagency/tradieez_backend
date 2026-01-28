@@ -16,7 +16,7 @@ const createChat = asyncHandler(async (req, res) => {
 
 const getChats = asyncHandler(async (req, res) => {
      const { userId, role } = req.headers;
-    const result = await GetChatsService(userId as string, role as TUserRole,);
+    const result = await GetChatsService(userId as string, role as TUserRole, req.query);
     res.status(200).json({
         success: true,
         message: 'Chats are retrieved successfully',
