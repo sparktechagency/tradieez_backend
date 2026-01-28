@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const port = config.port || 8080;
 
 //Initialize socket.io server
-if (config.vercel_server === "yes") {
+if (config.vercel_server !== "yes") {
   const io = new Server(server, {
     cors: { origin: "*" },
   });
