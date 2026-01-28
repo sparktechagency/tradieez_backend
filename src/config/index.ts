@@ -25,4 +25,5 @@ export default {
     cloud_name: process.env.CLOUD_NAME,
     cloud_api_key: process.env.CLOUD_API_KEY,
     cloud_api_secret_key: process.env.CLOUD_API_SECRET_KEY,
+    vercel_server:process.env.VERCEL_SERVER
 }
