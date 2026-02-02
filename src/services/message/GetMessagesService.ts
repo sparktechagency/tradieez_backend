@@ -29,7 +29,7 @@ const GetMessagesService = async (loginUserId: string, chatId: string) => {
         updatedAt: 0,
       },
     },
-    { $sort: { createdAt: -1 } },
+    { $sort: { createdAt: 1 } },
   ]);
 
   return result;

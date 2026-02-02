@@ -7,6 +7,9 @@ export interface IMessage extends Document{
 }
 
 export interface IMessagePayload {
-  text: string;
   chatId: string;
+  senderId: string;
+  receiverId: string
+  text: string;
 }
+

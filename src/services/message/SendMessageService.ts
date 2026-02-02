@@ -8,7 +8,7 @@ import isNotObjectId from "../../utils/isNotObjectId";
 
 const SendMessageService = async (
   loginUserId: string,
-  payload: IMessagePayload
+  payload: IMessagePayload,
 ) => {
   const { text, chatId } = payload;
   if (!text) {
@@ -50,7 +50,7 @@ const SendMessageService = async (
           text,
         },
       ],
-      { session }
+      { session },
     );
 
     //emit or send the new message to the receiver's socket
@@ -63,8 +63,8 @@ const SendMessageService = async (
     await session.commitTransaction();
     await session.endSession();
     return newMessage[0];
-  } catch (err:any) {
-     await session.abortTransaction();
+  } catch (err: any) {
+    await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
   }
