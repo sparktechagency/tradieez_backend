@@ -22,7 +22,7 @@ if (config.vercel_server !== "yes") {
     cors: { origin: "*" },
   });
 
-  console.log("No vercel");
+  //console.log("No vercel");
 
   //store online users
   //export const userSocketMap = {}; //{ userId:socketId }
@@ -34,7 +34,7 @@ if (config.vercel_server !== "yes") {
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     //console.log("User Connected", userId);
-    console.log("🟢 User Connected", socket.id);
+    //console.log("🟢 User Connected", socket.id);
 
     if (userId) {
       userSocketMap[userId as string] = socket.id;
@@ -46,85 +46,80 @@ if (config.vercel_server !== "yes") {
     /*==================================================== send message started ===============================================================*/
     /*==================================================== send message started ===============================================================*/
     socket.on("sendMessage", async (data: IMessagePayload) => {
-      const { chatId, receiverId, senderId, text } = data;
-      if (!chatId || !receiverId || !senderId || !text) {
-        console.log("⚠️ Invalid Message");
-      }
-      //console.log("Message received:", data);
-
-      if (!text) {
-        throw new CustomError(400, "text is required");
-      }
-
-      if (isNotObjectId(chatId)) {
-        throw new CustomError(400, "chatId must be a valid ObjectId");
-      }
-
-      const ObjectId = Types.ObjectId;
-
-      const chat = await ChatModel.findOne({
-        _id: chatId,
-        members: { $all: [new ObjectId(senderId), new ObjectId(receiverId)] },
-      });
-
-      if (!chat) {
-        throw new CustomError(
-          404,
-          "Converstion not found with the provided Id",
-        );
-      }
-
-      //transaction & rollback
       const session = await mongoose.startSession();
+      //console.log("Received New Message", data);
 
       try {
+        const { chatId, receiverId, senderId, text } = data;
+
+        if (!text) {
+          socket.emit("errorMessage", { message: "Text is required" });
+          return;
+        }
+
+        if (isNotObjectId(chatId)) {
+          socket.emit("errorMessage", { message: "Invalid chatId" });
+          return;
+        }
+
+        const ObjectId = Types.ObjectId;
+
+        const chat = await ChatModel.findOne({
+          _id: chatId,
+          members: { $all: [new ObjectId(senderId), new ObjectId(receiverId)] },
+        });
+
+        if (!chat) {
+          socket.emit("errorMessage", { message: "Conversation not found" });
+          return;
+        }
+
         session.startTransaction();
 
-        //update conversation
-        await ChatModel.updateOne({ _id: chatId }, { text }, { session });
-
-        //insert message
-        const newMessage = await MessageModel.create(
-          [
-            {
-              chatId,
-              senderId,
-              text,
-            },
-          ],
+       await ChatModel.updateOne(
+          { _id: new Types.ObjectId(chatId) },
+          { text: text }, // ✅ better field name
           { session },
         );
 
-        //emit or send the new message to the receiver's socket
+
+        const [newMessage] = await MessageModel.create(
+          [{ chatId, senderId, text }],
+          { session },
+        );
+
         const receiverSocketId = userSocketMap[receiverId];
         if (receiverSocketId) {
           io.to(receiverSocketId).emit("newMessage", {
-            ...newMessage[0],
-            receiverId
+            _id: newMessage?._id,
+            chatId: newMessage?.chatId,
+            senderId: newMessage?.senderId,
+            text: newMessage?.text,
+            createdAt: newMessage?.createdAt,
+            receiverId,
           });
         }
 
-        //console.log(newMessage);
+        //console.log("Send Message success");
 
-        console.log("Message send success");
-
-        //transaction success
         await session.commitTransaction();
         await session.endSession();
-        return newMessage[0];
-      } catch (err: any) {
+      } catch (err) {
         await session.abortTransaction();
         await session.endSession();
-        throw new Error(err);
+
+        console.error("SendMessage error:", err);
+        socket.emit("errorMessage", { message: "Failed to send message" });
       }
     });
+
     /*==================================================== send message ended ===============================================================*/
     /*==================================================== send message ended ===============================================================*/
 
     //user disconnected
     socket.on("disconnect", () => {
       //console.log("User Disconnected", userId);
-      console.log("🔴 User Disconnected", socket.id);
+      //console.log("🔴 User Disconnected", socket.id);
       delete userSocketMap[userId as string];
 
       io.emit("getOnlineUsers", Object.keys(userSocketMap)); //again send online users
