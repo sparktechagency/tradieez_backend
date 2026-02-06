@@ -10,11 +10,11 @@ import { TUserRole } from "../../interfaces/user.interface";
 const CreateChatService = async (
   loginUserId: string,
   loginUserRole: TUserRole,
-  payload: ICreateChatPylaod
+  payload: ICreateChatPylaod,
 ) => {
   const { partnerId, text } = payload;
 
-  if(loginUserId.toString() === partnerId){
+  if (loginUserId.toString() === partnerId) {
     throw new CustomError(409, "partnerId & login user Id can't be same");
   }
 
@@ -24,7 +24,7 @@ const CreateChatService = async (
     throw new CustomError(404, "Parter not found with the provided Id");
   }
 
-  if(loginUserRole === otherUser.role){
+  if (loginUserRole === otherUser.role) {
     throw new CustomError(409, "you can't send message between same type user");
   }
 
@@ -52,7 +52,7 @@ const CreateChatService = async (
       await ChatModel.updateOne(
         { _id: new ObjectId(chatId) },
         { text: text },
-        { session }
+        { session },
       );
 
       const newMessageBody = {
@@ -82,13 +82,13 @@ const CreateChatService = async (
       text: text,
     };
 
-    const message = await MessageModel.create([messageBody], { session });
+    const [newMessage] = await MessageModel.create([messageBody], { session });
     //transaction success
     await session.commitTransaction();
     await session.endSession();
     return {
       message: "New conversation created",
-      data: message[0],
+      data: newMessage
     };
   } catch (err: any) {
     await session.abortTransaction();
