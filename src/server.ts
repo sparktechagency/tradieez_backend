@@ -35,7 +35,7 @@ if (config.vercel_server !== "yes") {
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     //console.log("User Connected", userId);
-    console.log("🟢 User Connected", socket.id);
+    //console.log("🟢 User Connected", socket.id);
 
     if (userId) {
       userSocketMap[userId as string] = socket.id;
@@ -117,7 +117,6 @@ if (config.vercel_server !== "yes") {
     /*================================== Create Chat Ended =======================================*/
     socket.on("createChat", async (payload: IMessagePayload) => {
       const { senderId, receiverId, text } = payload;
-      console.log(payload);
 
       if (senderId.toString() === receiverId) {
         socket.emit("errorMessage", {
@@ -135,7 +134,7 @@ if (config.vercel_server !== "yes") {
         return;
       }
 
-      let senderUser: Record<string, unknown> = {};
+      let senderUser: any;
       if (loginUser.role === "candidate") {
         const user = await CandidateModel.findOne({ userId: senderId });
         if (!user) {
@@ -144,9 +143,7 @@ if (config.vercel_server !== "yes") {
           });
           return;
         }
-        senderUser = {
-          ...user
-        };
+        senderUser = user;
       } else {
         const user = await EmployerModel.findOne({ userId: senderId });
         if (!user) {
@@ -155,9 +152,7 @@ if (config.vercel_server !== "yes") {
           });
           return;
         }
-        senderUser = {
-          ...user
-        };
+        senderUser = user;
       }
 
       //check other user
@@ -212,7 +207,7 @@ if (config.vercel_server !== "yes") {
             session,
           });
 
-          console.log("Already Create Chat");
+          ///console.log("Already Create Chat");
           const receiverSocketId = userSocketMap[receiverId];
           if (receiverSocketId) {
             io.to(receiverSocketId).emit("newMessage", {
@@ -247,6 +242,7 @@ if (config.vercel_server !== "yes") {
         //send new conversation
         const newConversation = {
           _id: conversation[0]?._id,
+          currentUserId: receiverId,
           receiverId: senderId,
           fullName: senderUser.fullName,
           profileImg: senderUser.profileImg,
@@ -254,12 +250,15 @@ if (config.vercel_server !== "yes") {
           updatedAt: conversation[0]?.updatedAt,
         };
 
-        console.log(newConversation);
+        const receiverSocketId = userSocketMap[receiverId];
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("newConversation", newConversation);
+        }
 
         //transaction success
         await session.commitTransaction();
         await session.endSession();
-        console.log("Create Chat");
+        //console.log("Create Chat");
         return;
       } catch {
         await session.abortTransaction();
@@ -275,7 +274,7 @@ if (config.vercel_server !== "yes") {
     //user disconnected
     socket.on("disconnect", () => {
       //console.log("User Disconnected", userId);
-      console.log("🔴 User Disconnected", socket.id);
+      //console.log("🔴 User Disconnected", socket.id);
       delete userSocketMap[userId as string];
 
       io.emit("getOnlineUsers", Object.keys(userSocketMap)); //again send online users
