@@ -12,7 +12,6 @@ const GetSingleEmployerService = async (employerUerId: string) => {
         {
             $match: {
                 userId: new Types.ObjectId(employerUerId),
-                status: "active"
             }
         },
         {
